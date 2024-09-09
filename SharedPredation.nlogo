@@ -1,4 +1,3 @@
-
 breed [ resources resource ]
 breed [ foragers forager ]
 
@@ -84,12 +83,18 @@ to set-globals
   set both-neighbor-list [ ]
 end
 
-; Landscape is 113x113 patches (i.e., grid cells) - outer boundary absorbs foragers that move onto it leaving 111x111 area for foragers to move throughout
+; Landscape is 113x113 patches (i.e., grid cells) - outer boundary (red patches) absorbs foragers that move onto it leaving 111x111 area for foragers to move throughout
 to color-landscape
-  ;ask patches with [pxcor >= (-50 - cluster-radius) and pxcor <= (50 + cluster-radius) and pycor >= (-50 - cluster-radius) and pycor <= (50 + cluster-radius)][set pcolor blue]  ; max extent of area occupied by parent resources
-  ask patches with [pxcor >= -56 and pxcor <= 56 and pycor >= -56 and pycor <= 56][set pcolor red]                                                                               ; absorbing boundary
-  ask patches with [pxcor >= -55 and pxcor <= 55 and pycor >= -55 and pycor <= 55][set pcolor yellow]                                                                            ; buffer
-  ask patches with [pxcor >= -50 and pxcor <= 50 and pycor >= -50 and pycor <= 50][set pcolor green]                                                                             ; core area
+  ask patches[
+    if ( pxcor >= (-50 - cluster-radius) and pxcor <= (50 + cluster-radius) and pycor >= (-50 - cluster-radius) and pycor <= (50 + cluster-radius))  ; max extent of area occupied by parent resources; used for Neyman-Scott process
+      [set pcolor blue]
+    if ( pxcor >= -56 and pxcor <= 56 and pycor >= -56 and pycor <= 56)                                                                              ; absorbing boundary
+      [set pcolor red]
+    if ( pxcor >= -55 and pxcor <= 55 and pycor >= -55 and pycor <= 55)                                                                              ; buffer
+      [set pcolor yellow]
+    if ( pxcor >= -50 and pxcor <= 50 and pycor >= -50 and pycor <= 50)                                                                              ; core area
+      [set pcolor green]
+    ]
 end
 
 to add-parents
