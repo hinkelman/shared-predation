@@ -1,1 +1,1 @@
-# shared-predation
+Incomplete attempt to expand on model in [Nolting et al. 2015](https://doi.org/10.1016/j.ecocom.2015.03.002) ([code](https://github.com/hinkelman/composite-random-search)) to include two resources and examine shared predation. 
