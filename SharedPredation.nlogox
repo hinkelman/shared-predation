@@ -37,6 +37,7 @@ globals [
   total-dist                                                          ; Total distance moved by all foragers
   energy-gained                                                       ; Total energy gained by all foragers
   resource-rejections                                                 ; Total number of R2 resources rejected
+  rejected-resources                                                  ; Agentset of resources currently marked as rejected; lets go check only these instead of all resources
   step-num                                                            ; Number of steps drawn by all foragers
   death-times
   type-eaten
@@ -68,6 +69,7 @@ to set-globals
   set step-num 0
   set total-dist 0
   set resource-rejections 0
+  set rejected-resources no-turtles
   ifelse (R1-radius >= R2-radius)[set cluster-radius R1-radius][set cluster-radius R2-radius]
   set death-times [ ]
   set type-eaten [ ]
@@ -179,7 +181,8 @@ to go
      ]
    tick                                                                ; Advance the tick counter
    if (not any? resources) [ stop ]                                    ; Stops run of simulation if no resources on landscape
-   ask resources with [rejected?][if (not any? foragers in-radius perceptual-radius)[set rejected? false]]
+   ask rejected-resources [if (not any? foragers in-radius perceptual-radius)[set rejected? false]]
+   set rejected-resources rejected-resources with [rejected?]          ; Drop resources that are available again
 end
 
 to recognize-resource [closest-resource]                              ; closest-resource is the nearest unrejected resource, found in go
@@ -189,6 +192,7 @@ to recognize-resource [closest-resource]                              ; closest-
     if(Selective?)[calculate-R1-density]
     ifelse (Selective? and R1-density > rejection-density)[
       ask closest-resource[set rejected? true]
+      set rejected-resources (turtle-set rejected-resources closest-resource)
       set resource-rejections (resource-rejections + 1)
       set step-length 0                                                  ; Encounters with resources reset step length and heading; cost of resource recognition (1 time step and reset step); forager doesn't just cruise through areas with low-quality resources
       set-target
