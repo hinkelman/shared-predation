@@ -449,39 +449,132 @@ end]]></code>
   </widgets>
   <info>## WHAT IS IT?
 
-This section could give a general understanding of what the model is trying to show or explain.
+This model extends the composite random search model of Nolting et al. (2015) by adding a second resource type. It asks how foragers that use composite random search behave when the landscape holds two clustered resources that differ in energy value and handling time. It also asks whether choosing which resources to eat changes what foragers gain.
+
+The model is unfinished and exploratory.
 
 ## HOW IT WORKS
 
-This section could explain what rules the agents use to create the overall behavior of the model.
+### Landscape
+
+The landscape uses colored zones:
+
+- **Green core**, from -50 to 50: resources are kept only here, and foragers start here.
+- **Yellow buffer**, out to ±55: foragers can move here.
+- **Red boundary**, at ±56: absorbs foragers. A forager that steps onto a red patch is removed and replaced by a new forager.
+- **Blue band**, outside the red boundary: shows how far cluster centers can sit outside the core. It appears only when the larger cluster radius is more than 6.
+
+Each resource type, R1 and R2, is placed using a Neyman-Scott process:
+
+1. The number of cluster centers (parents) is drawn from a Poisson distribution with mean `R1-clusters` or `R2-clusters`. Parents are placed uniformly in a square that extends one cluster radius beyond the core.
+2. Offspring are created one at a time near a randomly chosen parent of the same type, at a random direction and at a uniform random distance up to `R1-radius` or `R2-radius`. Offspring that land outside the green core are discarded. This repeats until there are `R1-num` or `R2-num` offspring.
+3. The parents are removed, so only offspring remain as resources.
+
+R1 resources are black and R2 resources are red.
+
+### Local resource density
+
+Foragers sense local resource density as a Gaussian-weighted sum over all resources, with σ = 1:
+
+    density = Σ (1 / (√(2π) σ)) × (energy / handle) × exp(−d² / (2σ²))
+
+Here `d` is the distance from the forager to each resource. Each resource is weighted by how profitable it is, which is its energy divided by its handling time.
+
+### Forager behavior
+
+Each tick, each forager does one of the following:
+
+- **Handling.** If the forager is still handling its last resource, it stays put. A resource takes `handle` ticks to handle.
+- **At a resource.** If the forager is within 0.01 of a resource it has not rejected, it recognizes the resource:
+  - It always eats an R1 resource.
+  - It eats an R2 resource unless `Selective?` is on and local R1 density is greater than `rejection-density`. In that case, it rejects the R2 resource and draws a new step. A rejected resource becomes available again once no forager is within the perceptual radius.
+- **Direct movement.** If an available resource is within the perceptual radius (0.5), the forager turns toward the nearest one and moves straight to it.
+- **Random search.** Otherwise, when its current step is finished, the forager turns to a random heading and calculates local resource density. This is R1 density by default, or the combined density of R1 and R2 if `Both-GUD?` is on. It then draws a new step length:
+  - If density is greater than `giving-up-density`, it uses **intensive search** (`intensive-mu`).
+  - Otherwise, it uses **extensive search** (`extensive-mu`).
+
+Foragers move at most 0.25 patches per tick. This is half the perceptual radius, so a forager never steps over a resource without seeing it.
+
+### Step lengths
+
+Step lengths are drawn from a Lévy (Pareto) distribution with exponent μ:
+
+- μ ≤ 1: uniform between 0 and 10^11, which approximates ballistic movement.
+- μ ≥ 3: the absolute value of a standard normal draw, which approximates Brownian movement.
+- Otherwise: a Pareto draw whose minimum step length is the perceptual radius.
+
+The simulation stops when no resources are left.
 
 ## HOW TO USE IT
 
-This section could explain how to use the model, including a description of each of the items in the interface tab.
+Set the parameters, click **setup**, then click **go**.
+
+R1 parameters are in the left column, and R2 parameters are in the right column.
+
+- `R1-num` / `R2-num`: number of resources of each type.
+- `R1-clusters` / `R2-clusters`: mean number of clusters (Poisson).
+- `R1-radius` / `R2-radius`: cluster radius. The slider switches between 8 (tightly clustered) and 64 (nearly uniform).
+- `R1-energy` / `R2-energy`: energy gained from eating one resource. The slider switches between 10 and 100.
+- `R1-handle` / `R2-handle`: handling time in ticks. The slider switches between 10 and 1000.
+
+Forager parameters:
+
+- `forager-num`: number of foragers on the landscape at once.
+- `extensive-mu` / `intensive-mu`: Lévy exponents for extensive and intensive search.
+- `giving-up-density`: density threshold for switching between search modes.
+- `rejection-density`: R1 density above which a selective forager rejects R2.
+- `Selective?`: lets foragers reject R2 resources.
+- `Both-GUD?`: bases the giving-up decision on combined R1 and R2 density instead of R1 density alone.
+- `calculate-neighbors?`: at setup, calculates how many R1 and R2 neighbors each resource has, weighted by distance. Eaten resources record these values. This step is slow when there are many resources.
+- `PD?`: draws forager paths.
+
+The model records these outputs, which you can read in the Command Center or in BehaviorSpace:
+
+- `total-dist`: total distance moved by all foragers.
+- `energy-gained`: total energy gained.
+- `handling-time`: total ticks spent handling.
+- `resource-rejections`: number of R2 resources rejected.
+- `step-num`: number of steps drawn.
+- `forager-count`: total number of foragers created, including replacements.
+- `death-times`: tick at which each resource was eaten.
+- `type-eaten`: type of each resource eaten.
+- `R1-neighbor-list`, `R2-neighbor-list`, `both-neighbor-list`: neighborhood density of each resource eaten.
+
+To color patches by the resource density field, run `visualize-R1-field` or `visualize-both-field` in the Command Center. These are slow.
 
 ## THINGS TO NOTICE
 
-This section could give some ideas of things for the user to notice while running the model.
+- Watch how foragers switch between long extensive steps and short intensive steps as they enter and leave clusters.
+- Compare the energy gained when the two resources are clustered differently, for example when R1 is tightly clustered and R2 is spread out.
+- When R2 is low in energy or slow to handle, check whether the R2 resources eaten mostly come from areas dense in R1.
 
 ## THINGS TO TRY
 
-This section could give some ideas of things for the user to try to do (move sliders, switches, etc.) with the model.
+- Turn on `Selective?` and vary `rejection-density` to see when rejecting R2 pays off.
+- Compare giving-up decisions based only on R1 with decisions based on both resources (`Both-GUD?`).
+- Use the included BehaviorSpace experiments to sweep cluster radius, energy, handling time and selectivity.
 
 ## EXTENDING THE MODEL
 
-This section could give some ideas of things to add or change in the procedures tab to make the model more complicated, detailed, accurate, etc.
+- Make forager traits, such as perceptual radius, speed and σ, into sliders or per-forager variables instead of fixed globals.
+- Make the density field used for visualization consistent with the one foragers sense. `visualize-R1-field` weights resources by energy only, but foragers weight them by energy divided by handling time.
+- Let foragers interact with each other, for example by competing for the same resources, to study shared predation directly.
 
 ## NETLOGO FEATURES
 
-This section could point out any especially interesting or unusual features of NetLogo that the model makes use of, particularly in the Procedures tab.  It might also point out places where workarounds were needed because of missing features.
+- Resources and foragers are two breeds that share the same space.
+- The density calculations loop over every resource, so their cost grows with the number of resources.
+- The world extends to ±114 so that clusters with the largest radius (64) can have centers outside the 101 × 101 core. Most of the space outside the absorbing boundary is used only during setup.
 
 ## RELATED MODELS
 
-This section could give the names of models in the NetLogo Models Library or elsewhere which are of related interest.
+- Composite random search model: https://github.com/hinkelman/composite-random-search
 
 ## CREDITS AND REFERENCES
 
-This section could contain a reference to the model's URL on the web if it has one, as well as any other necessary credits or references.</info>
+Nolting, B. C., Hinkelman, T. M., Brassil, C. E., and Tenhumberg, B. (2015). Composite random search strategies based on non-directional sensory cues. Ecological Complexity, 22, 126–138. https://doi.org/10.1016/j.ecocom.2015.03.002
+
+Source: https://github.com/hinkelman/shared-predation</info>
   <turtleShapes>
     <shape name="default" rotatable="true" editableColorIndex="0">
       <polygon color="-1920102913" filled="true" marked="true">

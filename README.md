@@ -27,4 +27,4 @@ Requires [NetLogo 7.0.4](https://ccl.northwestern.edu/netlogo/) or later. Open `
 
 ## Status
 
-This is an unfinished exploratory model, and its Info tab has not been written yet.
+This is an unfinished exploratory model. See the Info tab in the model for full documentation.
