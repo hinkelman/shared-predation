@@ -120,25 +120,27 @@ end
 
 to add-offspring
   set-default-shape resources "dot"                                     ; Set shape of resources to dot - foragers and resources are actually points, but can be given arbitrary dimensions for visualization
-  while [count resources with [generation = "offspring" and resource-type = "R1"] < R1-num][
+  let R1-placed 0                                                     ; Number of R1 offspring that landed in the core area; avoids recounting resources on every pass
+  while [R1-placed < R1-num][
     ask one-of resources with [generation = "parent" and resource-type = "R1"][
       hatch-resources 1 [
       set color black
       set generation "offspring"
       rt random 360
       fd (random-float R1-radius)
-      if ( [pcolor] of patch-here != green)[die]
+      ifelse ( [pcolor] of patch-here != green)[die][set R1-placed (R1-placed + 1)]
       ]
     ]
   ]
-  while [count resources with [generation = "offspring" and resource-type = "R2"] < R2-num][
+  let R2-placed 0                                                     ; Number of R2 offspring that landed in the core area; avoids recounting resources on every pass
+  while [R2-placed < R2-num][
     ask one-of resources with [generation = "parent" and resource-type = "R2"][
       hatch-resources 1 [
       set color red
       set generation "offspring"
       rt random 360
       fd (random-float R2-radius)
-      if ( [pcolor] of patch-here != green)[die]
+      ifelse ( [pcolor] of patch-here != green)[die][set R2-placed (R2-placed + 1)]
       ]
     ]
   ]
