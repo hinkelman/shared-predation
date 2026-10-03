@@ -419,30 +419,32 @@ to visualize-both-field                                            ; Calculates 
 end]]></code>
   <widgets>
     <view x="220" wrappingAllowedX="false" y="25" frameRate="30.0" minPycor="-114" height="925" showTickCounter="true" patchSize="4.0" fontSize="10" wrappingAllowedY="false" width="924" tickCounterLabel="ticks" maxPycor="114" updateMode="1" maxPxcor="114" minPxcor="-114"></view>
-    <button x="1165" y="530" height="33" disableUntilTicks="false" forever="false" kind="Observer" width="66" sizeVersion="0">setup</button>
-    <slider x="25" step="1" y="90" max="20" display="R1-clusters" height="33" min="1" direction="Horizontal" default="15.0" variable="R1-clusters" width="172" sizeVersion="0"></slider>
-    <slider x="25" step="100" y="40" max="300" display="R1-num" height="33" min="100" direction="Horizontal" default="125.0" variable="R1-num" width="175" sizeVersion="0"></slider>
-    <slider x="25" step="56" y="140" max="64" display="R1-radius" height="33" min="8" direction="Horizontal" default="64.0" variable="R1-radius" width="172" sizeVersion="0"></slider>
-    <button x="1275" y="530" height="33" disableUntilTicks="false" forever="true" kind="Observer" width="63" sizeVersion="0">go</button>
-    <slider x="25" step="0.1" y="475" max="3" display="extensive-mu" height="33" min="1" direction="Horizontal" default="1.0" variable="extensive-mu" width="172" sizeVersion="0"></slider>
-    <slider x="25" step="0.1" y="525" max="3" display="intensive-mu" height="33" min="1" direction="Horizontal" default="3.0" variable="intensive-mu" width="172" sizeVersion="0"></slider>
-    <slider x="25" step="0.001" y="575" max="1" display="giving-up-density" height="33" min="0" direction="Horizontal" default="0.01" variable="giving-up-density" width="170" sizeVersion="0"></slider>
-    <slider x="1165" step="0.05" y="300" max="2" display="perceptual-radius" height="33" min="0.1" direction="Horizontal" default="0.5" variable="perceptual-radius" width="172" sizeVersion="0"></slider>
-    <slider x="1165" step="0.05" y="350" max="1" display="speed" height="33" min="0.05" direction="Horizontal" default="0.25" variable="speed" width="172" sizeVersion="0"></slider>
-    <slider x="1165" step="0.25" y="400" max="5" display="sigma" height="33" min="0.25" direction="Horizontal" default="1.0" variable="sigma" width="172" sizeVersion="0"></slider>
-    <switch x="1200" y="470" height="33" on="true" variable="PD?" display="PD?" width="103" sizeVersion="0"></switch>
-    <slider x="25" step="1" y="425" max="10" display="forager-num" height="33" min="1" direction="Horizontal" default="1.0" variable="forager-num" width="172" sizeVersion="0"></slider>
-    <slider x="1165" step="100" y="35" max="300" display="R2-num" height="33" min="100" direction="Horizontal" default="375.0" variable="R2-num" width="172" sizeVersion="0"></slider>
-    <slider x="1165" step="1" y="85" max="20" display="R2-clusters" height="33" min="1" direction="Horizontal" default="15.0" variable="R2-clusters" width="172" sizeVersion="0"></slider>
-    <slider x="1165" step="56" y="135" max="64" display="R2-radius" height="33" min="8" direction="Horizontal" default="64.0" variable="R2-radius" width="172" sizeVersion="0"></slider>
-    <slider x="25" step="90" y="190" max="100" display="R1-energy" height="33" min="10" direction="Horizontal" default="100.0" variable="R1-energy" width="172" sizeVersion="0"></slider>
-    <slider x="1165" step="90" y="185" max="100" display="R2-energy" height="33" min="10" direction="Horizontal" default="100.0" variable="R2-energy" width="172" sizeVersion="0"></slider>
-    <slider x="25" step="0.01" y="625" max="100" display="rejection-density" height="33" min="0" direction="Horizontal" default="100.0" variable="rejection-density" width="172" sizeVersion="0"></slider>
-    <switch x="55" y="695" height="33" on="false" variable="Selective?" display="Selective?" width="112" sizeVersion="0"></switch>
-    <slider x="25" step="990" y="240" max="1000" display="R1-handle" height="33" min="10" direction="Horizontal" default="10.0" variable="R1-handle" width="172" sizeVersion="0"></slider>
-    <slider x="1165" step="990" y="235" max="1000" display="R2-handle" height="33" min="10" direction="Horizontal" default="1000.0" variable="R2-handle" width="172" sizeVersion="0"></slider>
-    <switch x="20" y="295" height="33" on="true" variable="calculate-neighbors?" display="calculate-neighbors?" width="187" sizeVersion="0"></switch>
-    <switch x="50" y="755" height="33" on="true" variable="Both-GUD?" display="Both-GUD?" width="122" sizeVersion="0"></switch>
+    <note x="15" y="15" backgroundDark="0" fontSize="14" width="190" markdown="false" height="25" textColorDark="-1" textColorLight="-16777216" backgroundLight="0">Resources</note>
+    <slider x="15" step="100" y="45" max="300" display="R1-num" height="50" min="100" direction="Horizontal" default="125.0" variable="R1-num" width="190"></slider>
+    <slider x="15" step="1" y="100" max="20" display="R1-clusters" height="50" min="1" direction="Horizontal" default="15.0" variable="R1-clusters" width="190"></slider>
+    <slider x="15" step="56" y="155" max="64" display="R1-radius" height="50" min="8" direction="Horizontal" default="64.0" variable="R1-radius" width="190"></slider>
+    <slider x="15" step="90" y="210" max="100" display="R1-energy" height="50" min="10" direction="Horizontal" default="100.0" variable="R1-energy" width="190"></slider>
+    <slider x="15" step="990" y="265" max="1000" display="R1-handle" height="50" min="10" direction="Horizontal" default="10.0" variable="R1-handle" width="190"></slider>
+    <slider x="15" step="100" y="335" max="300" display="R2-num" height="50" min="100" direction="Horizontal" default="375.0" variable="R2-num" width="190"></slider>
+    <slider x="15" step="1" y="390" max="20" display="R2-clusters" height="50" min="1" direction="Horizontal" default="15.0" variable="R2-clusters" width="190"></slider>
+    <slider x="15" step="56" y="445" max="64" display="R2-radius" height="50" min="8" direction="Horizontal" default="64.0" variable="R2-radius" width="190"></slider>
+    <slider x="15" step="90" y="500" max="100" display="R2-energy" height="50" min="10" direction="Horizontal" default="100.0" variable="R2-energy" width="190"></slider>
+    <slider x="15" step="990" y="555" max="1000" display="R2-handle" height="50" min="10" direction="Horizontal" default="1000.0" variable="R2-handle" width="190"></slider>
+    <switch x="15" y="625" height="40" on="true" variable="calculate-neighbors?" display="calculate-neighbors?" width="190"></switch>
+    <button x="1160" y="15" height="40" disableUntilTicks="false" forever="false" kind="Observer" width="90">setup</button>
+    <button x="1260" y="15" height="40" disableUntilTicks="false" forever="true" kind="Observer" width="90">go</button>
+    <note x="1160" y="70" backgroundDark="0" fontSize="14" width="190" markdown="false" height="25" textColorDark="-1" textColorLight="-16777216" backgroundLight="0">Foragers</note>
+    <slider x="1160" step="1" y="100" max="10" display="forager-num" height="50" min="1" direction="Horizontal" default="1.0" variable="forager-num" width="190"></slider>
+    <slider x="1160" step="0.05" y="155" max="2" display="perceptual-radius" height="50" min="0.1" direction="Horizontal" default="0.5" variable="perceptual-radius" width="190"></slider>
+    <slider x="1160" step="0.05" y="210" max="1" display="speed" height="50" min="0.05" direction="Horizontal" default="0.25" variable="speed" width="190"></slider>
+    <slider x="1160" step="0.25" y="265" max="5" display="sigma" height="50" min="0.25" direction="Horizontal" default="1.0" variable="sigma" width="190"></slider>
+    <slider x="1160" step="0.1" y="335" max="3" display="extensive-mu" height="50" min="1" direction="Horizontal" default="1.0" variable="extensive-mu" width="190"></slider>
+    <slider x="1160" step="0.1" y="390" max="3" display="intensive-mu" height="50" min="1" direction="Horizontal" default="3.0" variable="intensive-mu" width="190"></slider>
+    <slider x="1160" step="0.001" y="445" max="1" display="giving-up-density" height="50" min="0" direction="Horizontal" default="0.01" variable="giving-up-density" width="190"></slider>
+    <switch x="1160" y="500" height="40" on="true" variable="Both-GUD?" display="Both-GUD?" width="190"></switch>
+    <slider x="1160" step="0.01" y="555" max="100" display="rejection-density" height="50" min="0" direction="Horizontal" default="100.0" variable="rejection-density" width="190"></slider>
+    <switch x="1160" y="610" height="40" on="false" variable="Selective?" display="Selective?" width="190"></switch>
+    <switch x="1160" y="670" height="40" on="true" variable="PD?" display="PD?" width="190"></switch>
   </widgets>
   <info>## WHAT IS IT?
 
@@ -506,26 +508,26 @@ The simulation stops when no resources are left.
 
 Set the parameters, click **setup**, then click **go**.
 
-R1 parameters are in the left column, and R2 parameters are in the right column.
+Resource parameters are in the left column, and forager parameters are in the right column.
 
 - `R1-num` / `R2-num`: number of resources of each type.
 - `R1-clusters` / `R2-clusters`: mean number of clusters (Poisson).
 - `R1-radius` / `R2-radius`: cluster radius. The slider switches between 8 (tightly clustered) and 64 (nearly uniform).
 - `R1-energy` / `R2-energy`: energy gained from eating one resource. The slider switches between 10 and 100.
 - `R1-handle` / `R2-handle`: handling time in ticks. The slider switches between 10 and 1000.
+- `calculate-neighbors?`: at setup, calculates how many R1 and R2 neighbors each resource has, weighted by distance. Eaten resources record these values. This step is slow when there are many resources.
 
-Forager parameters:
+Forager parameters (right column):
 
 - `forager-num`: number of foragers on the landscape at once.
-- `extensive-mu` / `intensive-mu`: Lévy exponents for extensive and intensive search.
-- `giving-up-density`: density threshold for switching between search modes.
-- `rejection-density`: R1 density above which a selective forager rejects R2.
-- `Selective?`: lets foragers reject R2 resources.
-- `Both-GUD?`: bases the giving-up decision on combined R1 and R2 density instead of R1 density alone.
-- `calculate-neighbors?`: at setup, calculates how many R1 and R2 neighbors each resource has, weighted by distance. Eaten resources record these values. This step is slow when there are many resources.
 - `perceptual-radius`: distance at which a forager detects a resource and moves straight to it. It is also the minimum Lévy step length.
 - `speed`: maximum distance a forager moves per tick. Keep it smaller than `perceptual-radius`.
 - `sigma`: width (σ) of the Gaussian kernel used for local resource density and neighbor calculations.
+- `extensive-mu` / `intensive-mu`: Lévy exponents for extensive and intensive search.
+- `giving-up-density`: density threshold for switching between search modes.
+- `Both-GUD?`: bases the giving-up decision on combined R1 and R2 density instead of R1 density alone.
+- `rejection-density`: R1 density above which a selective forager rejects R2.
+- `Selective?`: lets foragers reject R2 resources.
 - `PD?`: draws forager paths.
 
 The model records these outputs, which you can read in the Command Center or in BehaviorSpace:
