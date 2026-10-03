@@ -450,6 +450,8 @@ end]]></code>
 
 This model extends the composite random search model of Nolting et al. (2015) by adding a second resource type. It asks how foragers that use composite random search behave when the landscape holds two clustered resources that differ in energy value and handling time. It also asks whether choosing which resources to eat changes what foragers gain.
 
+The model is aimed at shared predation: indirect interactions between two resource types that are eaten by the same forager. Because foragers eat both R1 and R2, the abundance, arrangement and quality of one resource type can change how heavily the other is eaten.
+
 The model is unfinished and exploratory.
 
 ## HOW IT WORKS
@@ -554,12 +556,13 @@ To color patches by the resource density field, run `visualize-R1-field` or `vis
 
 - Turn on `Selective?` and vary `rejection-density` to see when rejecting R2 pays off.
 - Compare giving-up decisions based only on R1 with decisions based on both resources (`Both-GUD?`).
+- Vary the number, clustering, energy or handling time of R2 and see how much R1 is eaten. This shows how one resource affects the other through the shared forager.
 - Use the included BehaviorSpace experiments to sweep cluster radius, energy, handling time and selectivity.
 
 ## EXTENDING THE MODEL
 
 - Make forager traits, such as perceptual radius, speed and σ, into per-forager variables so that foragers can differ.
-- Let foragers interact with each other, for example by competing for the same resources, to study shared predation directly.
+- Let foragers interact with each other, for example by competing for the same resources.
 
 ## NETLOGO FEATURES
 
