@@ -163,8 +163,9 @@ to go
      ]
    ask foragers [
      ifelse(last-handle-counter >= last-resource-handle)[
-       ifelse (any? resources with [not rejected?] in-radius 0.01)[
-         recognize-resource
+       let nearby-resources (resources in-radius 0.01) with [not rejected?] ; Filter by radius first so NetLogo only checks nearby resources
+       ifelse (any? nearby-resources)[
+         recognize-resource min-one-of nearby-resources [distance myself]
          ][
          set-target
          move
@@ -179,10 +180,9 @@ to go
    ask resources with [rejected?][if (not any? foragers in-radius perceptual-radius)[set rejected? false]]
 end
 
-to recognize-resource
-  let closest-resource min-one-of resources [distance myself]         ; Creates an agent set (of one) indicating the identity of the nearest resource
+to recognize-resource [closest-resource]                              ; closest-resource is the nearest unrejected resource, found in go
   ifelse ([resource-type] of closest-resource = "R1")[
-    consume-resource
+    consume-resource closest-resource
     ][
     if(Selective?)[calculate-R1-density]
     ifelse (Selective? and R1-density > rejection-density)[
@@ -191,13 +191,12 @@ to recognize-resource
       set step-length 0                                                  ; Encounters with resources reset step length and heading; cost of resource recognition (1 time step and reset step); forager doesn't just cruise through areas with low-quality resources
       set-target
       ][
-      consume-resource
+      consume-resource closest-resource
       ]
     ]
 end
 
-to consume-resource
-  let closest-resource min-one-of resources [distance myself]          ; Creates an agent set (of one) indicating the identity of the nearest resource
+to consume-resource [closest-resource]
   set last-resource-handle [handle] of closest-resource
   set energy-gained (energy-gained + [energy] of closest-resource)
   set type-eaten lput ([resource-type] of closest-resource) type-eaten
@@ -217,12 +216,14 @@ to handle-resource
 end
 
 to set-target
-  let available-resources (resources with [not rejected?])
-  ifelse (any? available-resources in-radius perceptual-radius and search-mode != "direct")[
-    let closest-resource min-one-of available-resources [distance myself]       ; Creates an agent set (of one) indicating the identity of the nearest resource
-    let dist-near-resource min [distance myself] of available-resources         ; Creates a local variable with the distance from the forager to the nearest resource within its perceptual radius
+  let available-resources no-turtles
+  if (search-mode != "direct")[                                       ; Skip the search when already moving directly to a resource
+    set available-resources (resources in-radius perceptual-radius) with [not rejected?]  ; Filter by radius first so NetLogo only checks nearby resources
+    ]
+  ifelse (any? available-resources)[
+    let closest-resource min-one-of available-resources [distance myself]       ; Nearest resource within the perceptual radius
     face closest-resource                                             ; set the heading of the forager to move directly to the nearest resource, and
-    set step-length dist-near-resource                                ; set the step-length of the forager to move the exact distance to the nearest resource
+    set step-length distance closest-resource                         ; set the step-length of the forager to move the exact distance to the nearest resource
     set search-mode "direct"
     set step-num (step-num + 1)                                       ; increment counter of number of steps drawn
     ][
@@ -260,26 +261,12 @@ to compare-R1-GUD                                                        ; Compa
     ]
 end
 
-to calculate-R1-density                                             ; Same process as in visualize-gradient procedure, but saves computational time by only calculating the resource gradient for patches at the current location of the forager (and only after resource consumption or after completing a step)
-  set R1-density 0                                                     ; Resets local-density for forager to 0
-  let id [who] of resources with [resource-type = "R1"]
-  let total count resources with [resource-type = "R1"]
-  let k 0
-  while [k < total ][         ; Calculate the local-density for forager by looping through all resources and calculating the distance to each resource - resources influence gradient calculation globally, but the weight of the contribution decays with distance as a normal distribution
-      set R1-density R1-density + ( (1 / (sqrt(2 * pi) * sigma)) * (R1-energy / R1-handle) * exp(- (([distance myself] of resource (item k id))  ^ 2 )/(2 * (sigma ^ 2)) ))
-      set k (k + 1)
-    ]
+to calculate-R1-density                                             ; Local R1 density at the forager's current location (only calculated after resource consumption or after completing a step)
+  set R1-density (R1-energy / R1-handle) * kernel-sum resources with [resource-type = "R1"]
 end
 
-to calculate-R2-density                                             ; Same process as in visualize-gradient procedure, but saves computational time by only calculating the resource gradient for patches at the current location of the forager (and only after resource consumption or after completing a step)
-  set R2-density 0                                                     ; Resets local-density for forager to 0
-  let id [who] of resources with [resource-type = "R2"]
-  let total count resources with [resource-type = "R2"]
-  let k 0
-  while [k < total][         ; Calculate the local-density for forager by looping through all resources and calculating the distance to each resource - resources influence gradient calculation globally, but the weight of the contribution decays with distance as a normal distribution
-      set R2-density R2-density + ( (1 / (sqrt(2 * pi) * sigma)) * (R2-energy / R2-handle) * exp(- (([distance myself] of resource (item k id))  ^ 2 )/(2 * (sigma ^ 2)) ))
-      set k (k + 1)
-    ]
+to calculate-R2-density                                             ; Local R2 density at the forager's current location (only calculated after resource consumption or after completing a step)
+  set R2-density (R2-energy / R2-handle) * kernel-sum resources with [resource-type = "R2"]
 end
 
 to calculate-both-density                                             ; Same process as in visualize-gradient procedure, but saves computational time by only calculating the resource gradient for patches at the current location of the forager (and only after resource consumption or after completing a step)
@@ -288,54 +275,21 @@ to calculate-both-density                                             ; Same pro
   set both-density (R1-density + R2-density)
 end
 
-to calculate-R1-neighbors                                            ; Same process as in visualize-gradient procedure, but saves computational time by only calculating the resource gradient for patches at the current location of the forager (and only after resource consumption or after completing a step)
-  ask resources [
-    set R1-neighbors 0                                                     ; Resets R1 neighborhood for resource to 0
-    ifelse(resource-type = "R1")[
-      let id [who] of other resources with [resource-type = "R1"]
-      let others count other resources with [resource-type = "R1"]
-      let k 0
-      while [k <  others][         ; Calculate the local-density for forager by looping through all resources and calculating the distance to each resource - resources influence gradient calculation globally, but the weight of the contribution decays with distance as a normal distribution
-        set R1-neighbors R1-neighbors + ( (1 / (sqrt(2 * pi) * sigma)) * exp(- (([distance myself] of resource (item k id))  ^ 2 )/(2 * (sigma ^ 2)) ))
-        set k (k + 1)
-      ]
-      ][
-      let id [who] of resources with [resource-type = "R1"]
-      let total count resources with [resource-type = "R1"]
-      let k 0
-      while [k < total ][         ; Calculate the local-density for forager by looping through all resources and calculating the distance to each resource - resources influence gradient calculation globally, but the weight of the contribution decays with distance as a normal distribution
-        set R1-neighbors R1-neighbors + ( (1 / (sqrt(2 * pi) * sigma)) * exp(- (([distance myself] of resource (item k id))  ^ 2 )/(2 * (sigma ^ 2)) ))
-        set k (k + 1)
-      ]
-    ]
-  ]
+to calculate-R1-neighbors                                            ; Gaussian-weighted number of R1 resources around each resource (excluding itself)
+  ask resources [ set R1-neighbors kernel-sum other resources with [resource-type = "R1"] ]
 end
 
-to calculate-R2-neighbors                                            ; Same process as in visualize-gradient procedure, but saves computational time by only calculating the resource gradient for patches at the current location of the forager (and only after resource consumption or after completing a step)
-  ask resources [
-    set R2-neighbors 0                                                     ; Resets R1 neighborhood for resource to 0
-    ifelse(resource-type = "R2")[
-      let id [who] of other resources with [resource-type = "R2"]
-      let others count other resources with [resource-type = "R2"]
-      let k 0
-      while [k < others ][         ; Calculate the local-density for forager by looping through all resources and calculating the distance to each resource - resources influence gradient calculation globally, but the weight of the contribution decays with distance as a normal distribution
-        set R2-neighbors R2-neighbors + ( (1 / (sqrt(2 * pi) * sigma)) * exp(- (([distance myself] of resource (item k id))  ^ 2 )/(2 * (sigma ^ 2)) ))
-        set k (k + 1)
-      ]
-      ][
-      let id [who] of resources with [resource-type = "R2"]
-      let total count resources with [resource-type = "R2"]
-      let k 0
-      while [k < total][         ; Calculate the local-density for forager by looping through all resources and calculating the distance to each resource - resources influence gradient calculation globally, but the weight of the contribution decays with distance as a normal distribution
-        set R2-neighbors R2-neighbors + ( (1 / (sqrt(2 * pi) * sigma)) * exp(- (([distance myself] of resource (item k id))  ^ 2 )/(2 * (sigma ^ 2)) ))
-        set k (k + 1)
-      ]
-    ]
-  ]
+to calculate-R2-neighbors                                            ; Gaussian-weighted number of R2 resources around each resource (excluding itself)
+  ask resources [ set R2-neighbors kernel-sum other resources with [resource-type = "R2"] ]
 end
 
 to calculate-both-neighbors
   ask resources [ set both-neighbors (R1-neighbors + R2-neighbors) ]
+end
+
+to-report kernel-sum [agents]                                        ; Sum of Gaussian kernel weights from the calling agent to each agent in agents - resources influence density globally, but the weight of each contribution decays with distance as a normal distribution
+  let two-sigma-sq 2 * sigma ^ 2
+  report (1 / (sqrt (2 * pi) * sigma)) * sum [exp (0 - (distance myself) ^ 2 / two-sigma-sq)] of agents
 end
 
 to move                                                                ; Incrementally move the distance of the step length
@@ -365,55 +319,21 @@ end
 
 to visualize-R1-field                                            ; Calculates resource field for all patches on the landscape (except for the patches in the outer boundary) and scales the color of the patch to the value of the resource field
   let arena patches with [pxcor >= -55 and pxcor <= 55 and pycor >= -55 and pycor <= 55]
-  ask arena[set R1-field 0]                                    ; Resets resource field for all patches to 0
-  let id [who] of resources with [resource-type = "R1"]               ; Creates local list of the ID (i.e., who number) for all resources
-  let i -55
-  while [i <= 55 ][                                                   ; Loop through all patches (except those in outer boundary) - patches are identified by coordinates for center of patch
-    let j -55
-    while [j <= 55][
-      let k 0
-      ask patch i j [
-        while [k < count resources with [resource-type = "R1"]  ][      ; Calculate the resource gradient for each patch by looping through all resources and calculating the distance to each resource - resources influence gradient calculation globally, but the weight of the contribution decays with distance as a bivariate normal distribution
-          set R1-field R1-field + ( (1 / (sqrt(2 * pi) * sigma)) * (R1-energy / R1-handle) * exp(- 1 * ( ([distance myself] of resource (item k id)) ^ 2 ) / (2 * (sigma ^ 2)) ))
-          set k (k + 1)
-          ]
-        ]
-      set j (j + 1)
-      ]
-     set i (i + 1)
-    ]
+  let R1s resources with [resource-type = "R1"]
+  ask arena [ set R1-field (R1-energy / R1-handle) * kernel-sum R1s ]   ; Resource field is calculated at the center of each patch
   let rf-max max ([R1-field] of arena)                         ; Color gradient is set based on the maximum gradient value
   ask arena[set pcolor scale-color (green) R1-field 0 rf-max]          ; lighter colors indicate higher values
 end
 
 to visualize-both-field                                            ; Calculates resource field for all patches on the landscape (except for the patches in the outer boundary) and scales the color of the patch to the value of the resource field
   let arena patches with [pxcor >= -55 and pxcor <= 55 and pycor >= -55 and pycor <= 55]
-  ask arena[set R1-field 0]
-  ask arena[set R2-field 0]
-  ask arena[set both-field 0]
-  let R1 [who] of resources with [resource-type = "R1"]               ; Creates local list of the ID (i.e., who number) for all resources
-  let R2 [who] of resources with [resource-type = "R2"]               ; Creates local list of the ID (i.e., who number) for all resources
-  let i -55
-  while [i <= 55 ][                                                   ; Loop through all patches (except those in outer boundary) - patches are identified by coordinates for center of patch
-    let j -55
-    while [j <= 55][
-      let k 0
-      let l 0
-      ask patch i j [
-        while [k < count resources with [resource-type = "R1"]  ][      ; Calculate the resource gradient for each patch by looping through all resources and calculating the distance to each resource - resources influence gradient calculation globally, but the weight of the contribution decays with distance as a bivariate normal distribution
-          set R1-field R1-field + ( (1 / (sqrt(2 * pi) * sigma)) * (R1-energy / R1-handle) * exp(- 1 * ( ([distance myself] of resource (item k R1)) ^ 2 ) / (2 * (sigma ^ 2)) ))
-          set k (k + 1)
-          ]
-        while [l < count resources with [resource-type = "R2"]  ][      ; Calculate the resource gradient for each patch by looping through all resources and calculating the distance to each resource - resources influence gradient calculation globally, but the weight of the contribution decays with distance as a bivariate normal distribution
-          set R2-field R2-field + ( (1 / (sqrt(2 * pi) * sigma)) * (R2-energy / R2-handle) * exp(- 1 * ( ([distance myself] of resource (item l R2)) ^ 2 ) / (2 * (sigma ^ 2)) ))
-          set l (l + 1)
-          ]
-        ]
-      set j (j + 1)
-      ]
-     set i (i + 1)
+  let R1s resources with [resource-type = "R1"]
+  let R2s resources with [resource-type = "R2"]
+  ask arena [                                                      ; Resource field is calculated at the center of each patch
+    set R1-field (R1-energy / R1-handle) * kernel-sum R1s
+    set R2-field (R2-energy / R2-handle) * kernel-sum R2s
+    set both-field (R1-field + R2-field)
     ]
-  ask arena[set both-field (R1-field + R2-field)]
   let rf-max max ([both-field] of arena)                         ; Color gradient is set based on the maximum gradient value
   ask arena[set pcolor scale-color (green) both-field 0 rf-max]          ; lighter colors indicate higher values
 end]]></code>
@@ -519,7 +439,7 @@ Resource parameters are in the left column, and forager parameters are in the ri
 - `R1-radius` / `R2-radius`: cluster radius. The slider switches between 8 (tightly clustered) and 64 (nearly uniform).
 - `R1-energy` / `R2-energy`: energy gained from eating one resource. The slider switches between 10 and 100.
 - `R1-handle` / `R2-handle`: handling time in ticks. The slider switches between 10 and 1000.
-- `calculate-neighbors?`: at setup, calculates how many R1 and R2 neighbors each resource has, weighted by distance. Eaten resources record these values. This step is slow when there are many resources.
+- `calculate-neighbors?`: at setup, calculates how many R1 and R2 neighbors each resource has, weighted by distance. Eaten resources record these values. Its cost grows with the square of the number of resources.
 
 Forager parameters (right column):
 
@@ -546,7 +466,7 @@ The model records these outputs, which you can read in the Command Center or in 
 - `type-eaten`: type of each resource eaten.
 - `R1-neighbor-list`, `R2-neighbor-list`, `both-neighbor-list`: neighborhood density of each resource eaten.
 
-To color patches by the resource density field, run `visualize-R1-field` or `visualize-both-field` in the Command Center. These are slow.
+To color patches by the resource density field, run `visualize-R1-field` or `visualize-both-field` in the Command Center.
 
 ## THINGS TO NOTICE
 
@@ -570,7 +490,7 @@ To color patches by the resource density field, run `visualize-R1-field` or `vis
 ## NETLOGO FEATURES
 
 - Resources and foragers are two breeds that share the same space.
-- The density calculations loop over every resource, so their cost grows with the number of resources.
+- The density calculations sum over every resource, so their cost grows with the number of resources. They use `sum [...] of` and `in-radius` instead of explicit loops, which NetLogo runs much faster.
 - The world extends to ±114 so that clusters with the largest radius (64) can have centers outside the 101 × 101 core. Most of the space outside the absorbing boundary is used only during setup.
 
 ## RELATED MODELS
