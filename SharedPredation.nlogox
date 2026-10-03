@@ -440,7 +440,7 @@ end]]></code>
     <slider x="1165" step="56" y="135" max="64" display="R2-radius" height="33" min="8" direction="Horizontal" default="64.0" variable="R2-radius" width="172" sizeVersion="0"></slider>
     <slider x="25" step="90" y="190" max="100" display="R1-energy" height="33" min="10" direction="Horizontal" default="100.0" variable="R1-energy" width="172" sizeVersion="0"></slider>
     <slider x="1165" step="90" y="185" max="100" display="R2-energy" height="33" min="10" direction="Horizontal" default="100.0" variable="R2-energy" width="172" sizeVersion="0"></slider>
-    <slider x="25" step="0.01" y="625" max="10" display="rejection-density" height="33" min="0" direction="Horizontal" default="100.0" variable="rejection-density" width="172" sizeVersion="0"></slider>
+    <slider x="25" step="0.01" y="625" max="100" display="rejection-density" height="33" min="0" direction="Horizontal" default="100.0" variable="rejection-density" width="172" sizeVersion="0"></slider>
     <switch x="55" y="695" height="33" on="false" variable="Selective?" display="Selective?" width="112" sizeVersion="0"></switch>
     <slider x="25" step="990" y="240" max="1000" display="R1-handle" height="33" min="10" direction="Horizontal" default="10.0" variable="R1-handle" width="172" sizeVersion="0"></slider>
     <slider x="1165" step="990" y="235" max="1000" display="R2-handle" height="33" min="10" direction="Horizontal" default="1000.0" variable="R2-handle" width="172" sizeVersion="0"></slider>
