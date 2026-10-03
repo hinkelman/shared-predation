@@ -380,7 +380,7 @@ to visualize-R1-field                                            ; Calculates re
       let k 0
       ask patch i j [
         while [k < count resources with [resource-type = "R1"]  ][      ; Calculate the resource gradient for each patch by looping through all resources and calculating the distance to each resource - resources influence gradient calculation globally, but the weight of the contribution decays with distance as a bivariate normal distribution
-          set R1-field R1-field + ( (1 / (sqrt(2 * pi) * sigma)) * (R1-energy) * exp(- 1 * ( ([distance myself] of resource (item k id)) ^ 2 ) / (2 * (sigma ^ 2)) ))
+          set R1-field R1-field + ( (1 / (sqrt(2 * pi) * sigma)) * (R1-energy / R1-handle) * exp(- 1 * ( ([distance myself] of resource (item k id)) ^ 2 ) / (2 * (sigma ^ 2)) ))
           set k (k + 1)
           ]
         ]
@@ -557,7 +557,6 @@ To color patches by the resource density field, run `visualize-R1-field` or `vis
 ## EXTENDING THE MODEL
 
 - Make forager traits, such as perceptual radius, speed and σ, into sliders or per-forager variables instead of fixed globals.
-- Make the density field used for visualization consistent with the one foragers sense. `visualize-R1-field` weights resources by energy only, but foragers weight them by energy divided by handling time.
 - Let foragers interact with each other, for example by competing for the same resources, to study shared predation directly.
 
 ## NETLOGO FEATURES
