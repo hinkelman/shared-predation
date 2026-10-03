@@ -30,11 +30,8 @@ patches-own [
   both-field
   ]
 
-globals [                                                             ; Several of these variables are actually state variables for the forager but were treated as globals because they are the same for all foragers and static throughout the simulation (should be changed for increased flexibility)
+globals [
   cluster-radius                                                      ; Larger of the cluster radii for the two resource types; used for visualizing landscape set-up
-  perceptual-radius                                                   ; Perceptual radius where forager knows exact location of resource
-  speed                                                               ; Max distance moved per tick by each forager
-  sigma
   forager-count
   handling-time
   total-dist                                                          ; Total distance moved by all foragers
@@ -66,9 +63,6 @@ to setup
 end
 
 to set-globals
-  set perceptual-radius 0.5                                           ; Perceptual radius is initialized to small value to model forager's that are only able to determine the exact resource location in close proximity
-  set speed 0.25                                                      ; Speed is set to a value that is a fraction of the perceptual radius to ensure that the forager never steps over any resources (i.e., cruise forager)
-  set sigma 1
   set handling-time 0
   set energy-gained 0
   set step-num 0
@@ -433,6 +427,9 @@ end]]></code>
     <slider x="25" step="0.1" y="475" max="3" display="extensive-mu" height="33" min="1" direction="Horizontal" default="1.0" variable="extensive-mu" width="172" sizeVersion="0"></slider>
     <slider x="25" step="0.1" y="525" max="3" display="intensive-mu" height="33" min="1" direction="Horizontal" default="3.0" variable="intensive-mu" width="172" sizeVersion="0"></slider>
     <slider x="25" step="0.001" y="575" max="1" display="giving-up-density" height="33" min="0" direction="Horizontal" default="0.01" variable="giving-up-density" width="170" sizeVersion="0"></slider>
+    <slider x="1165" step="0.05" y="300" max="2" display="perceptual-radius" height="33" min="0.1" direction="Horizontal" default="0.5" variable="perceptual-radius" width="172" sizeVersion="0"></slider>
+    <slider x="1165" step="0.05" y="350" max="1" display="speed" height="33" min="0.05" direction="Horizontal" default="0.25" variable="speed" width="172" sizeVersion="0"></slider>
+    <slider x="1165" step="0.25" y="400" max="5" display="sigma" height="33" min="0.25" direction="Horizontal" default="1.0" variable="sigma" width="172" sizeVersion="0"></slider>
     <switch x="1200" y="470" height="33" on="true" variable="PD?" display="PD?" width="103" sizeVersion="0"></switch>
     <slider x="25" step="1" y="425" max="10" display="forager-num" height="33" min="1" direction="Horizontal" default="1.0" variable="forager-num" width="172" sizeVersion="0"></slider>
     <slider x="1165" step="100" y="35" max="300" display="R2-num" height="33" min="100" direction="Horizontal" default="375.0" variable="R2-num" width="172" sizeVersion="0"></slider>
@@ -474,7 +471,7 @@ R1 resources are black and R2 resources are red.
 
 ### Local resource density
 
-Foragers sense local resource density as a Gaussian-weighted sum over all resources, with σ = 1:
+Foragers sense local resource density as a Gaussian-weighted sum over all resources, where σ is `sigma`:
 
     density = Σ (1 / (√(2π) σ)) × (energy / handle) × exp(−d² / (2σ²))
 
@@ -488,12 +485,12 @@ Each tick, each forager does one of the following:
 - **At a resource.** If the forager is within 0.01 of a resource it has not rejected, it recognizes the resource:
   - It always eats an R1 resource.
   - It eats an R2 resource unless `Selective?` is on and local R1 density is greater than `rejection-density`. In that case, it rejects the R2 resource and draws a new step. A rejected resource becomes available again once no forager is within the perceptual radius.
-- **Direct movement.** If an available resource is within the perceptual radius (0.5), the forager turns toward the nearest one and moves straight to it.
+- **Direct movement.** If an available resource is within the perceptual radius (`perceptual-radius`), the forager turns toward the nearest one and moves straight to it.
 - **Random search.** Otherwise, when its current step is finished, the forager turns to a random heading and calculates local resource density. This is R1 density by default, or the combined density of R1 and R2 if `Both-GUD?` is on. It then draws a new step length:
   - If density is greater than `giving-up-density`, it uses **intensive search** (`intensive-mu`).
   - Otherwise, it uses **extensive search** (`extensive-mu`).
 
-Foragers move at most 0.25 patches per tick. This is half the perceptual radius, so a forager never steps over a resource without seeing it.
+Foragers move at most `speed` patches per tick. Keep `speed` smaller than `perceptual-radius` (the defaults are 0.25 and 0.5) so that a forager never steps over a resource without seeing it.
 
 ### Step lengths
 
@@ -526,6 +523,9 @@ Forager parameters:
 - `Selective?`: lets foragers reject R2 resources.
 - `Both-GUD?`: bases the giving-up decision on combined R1 and R2 density instead of R1 density alone.
 - `calculate-neighbors?`: at setup, calculates how many R1 and R2 neighbors each resource has, weighted by distance. Eaten resources record these values. This step is slow when there are many resources.
+- `perceptual-radius`: distance at which a forager detects a resource and moves straight to it. It is also the minimum Lévy step length.
+- `speed`: maximum distance a forager moves per tick. Keep it smaller than `perceptual-radius`.
+- `sigma`: width (σ) of the Gaussian kernel used for local resource density and neighbor calculations.
 - `PD?`: draws forager paths.
 
 The model records these outputs, which you can read in the Command Center or in BehaviorSpace:
@@ -556,7 +556,7 @@ To color patches by the resource density field, run `visualize-R1-field` or `vis
 
 ## EXTENDING THE MODEL
 
-- Make forager traits, such as perceptual radius, speed and σ, into sliders or per-forager variables instead of fixed globals.
+- Make forager traits, such as perceptual radius, speed and σ, into per-forager variables so that foragers can differ.
 - Let foragers interact with each other, for example by competing for the same resources, to study shared predation directly.
 
 ## NETLOGO FEATURES
