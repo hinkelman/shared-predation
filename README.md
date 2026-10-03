@@ -2,6 +2,11 @@
 
 An incomplete NetLogo model that extends the composite random search model in [Nolting et al. 2015](https://doi.org/10.1016/j.ecocom.2015.03.002) ([code](https://github.com/hinkelman/composite-random-search)) to include a second resource type and examine shared predation: indirect interactions between two resource types that are eaten by the same forager.
 
+Because the resources are clustered in space, these interactions can show up as neighborhood effects, where a resource's risk of being eaten depends on what is near it:
+
+- **Shared doom**: living near a preferred resource raises the chance of being eaten ([Wahl and Hay 1995](https://doi.org/10.1007/BF00329800); [Emerson et al. 2012](https://doi.org/10.1007/s00442-011-2144-4)).
+- **Associational refuge**: neighbors lower that chance ([Hay 1986](https://doi.org/10.1086/284593); [Barbosa et al. 2009](https://doi.org/10.1146/annurev.ecolsys.110308.120242)).
+
 ## Overview
 
 Foragers search a landscape that holds two resource types, R1 and R2. Each type is placed in clusters using a Neyman-Scott process, and each has its own number of clusters, cluster radius, energy value and handling time.
