@@ -450,7 +450,9 @@ end]]></code>
 
 This model extends the composite random search model of Nolting et al. (2015) by adding a second resource type. It asks how foragers that use composite random search behave when the landscape holds two clustered resources that differ in energy value and handling time. It also asks whether choosing which resources to eat changes what foragers gain.
 
-The model is aimed at shared predation: indirect interactions between two resource types that are eaten by the same forager. Because foragers eat both R1 and R2, the abundance, arrangement and quality of one resource type can change how heavily the other is eaten.
+The model is aimed at shared predation: indirect interactions between two resource types that are eaten by the same forager. Because foragers eat both R1 and R2, the abundance, arrangement and quality of one resource type can change how heavily the other is eaten. These indirect effects can be negative (apparent competition; Holt 1977) or positive (apparent mutualism; Abrams and Matsuda 1996). Forager numbers are fixed in this model, so it captures only the short-term effects that arise from forager behavior, such as handling time and diet choice, and not the long-term effects of changes in forager numbers.
+
+Because resources are clustered in space, these effects can also appear as neighborhood (associational) effects, where a resource's risk of being eaten depends on what is around it. In *shared doom*, also called associational susceptibility, living near a preferred resource raises the chance of being eaten (Wahl and Hay 1995; Emerson et al. 2012). In an *associational refuge*, also called associational resistance, neighbors lower that chance (Hay 1986; Barbosa et al. 2009). Emerson et al. (2012) showed that which effect appears depends on the consumer's diet choice and on the spatial scale at which the resources are mixed.
 
 The model is unfinished and exploratory.
 
@@ -550,13 +552,14 @@ To color patches by the resource density field, run `visualize-R1-field` or `vis
 
 - Watch how foragers switch between long extensive steps and short intensive steps as they enter and leave clusters.
 - Compare the energy gained when the two resources are clustered differently, for example when R1 is tightly clustered and R2 is spread out.
-- When R2 is low in energy or slow to handle, check whether the R2 resources eaten mostly come from areas dense in R1.
+- Check whether R2 resources near R1 clusters are eaten more often than isolated R2 resources. Dense R1 triggers intensive search, so nearby R2 may suffer shared doom. With `Selective?` on, foragers reject R2 where R1 is dense, so R1 may instead give nearby R2 an associational refuge.
 
 ## THINGS TO TRY
 
 - Turn on `Selective?` and vary `rejection-density` to see when rejecting R2 pays off.
 - Compare giving-up decisions based only on R1 with decisions based on both resources (`Both-GUD?`).
 - Vary the number, clustering, energy or handling time of R2 and see how much R1 is eaten. This shows how one resource affects the other through the shared forager.
+- Vary `R1-radius` and `R2-radius` to change how closely the two resources overlap in space, and see whether shared doom or associational refuge changes with the scale of mixing.
 - Use the included BehaviorSpace experiments to sweep cluster radius, energy, handling time and selectivity.
 
 ## EXTENDING THE MODEL
@@ -576,7 +579,19 @@ To color patches by the resource density field, run `visualize-R1-field` or `vis
 
 ## CREDITS AND REFERENCES
 
+Abrams, P. A., and Matsuda, H. (1996). Positive indirect effects between prey species that share predators. Ecology, 77, 610–616. https://doi.org/10.2307/2265634
+
+Barbosa, P., Hines, J., Kaplan, I., Martinson, H., Szczepaniec, A., and Szendrei, Z. (2009). Associational resistance and associational susceptibility: having right or wrong neighbors. Annual Review of Ecology, Evolution, and Systematics, 40, 1–20. https://doi.org/10.1146/annurev.ecolsys.110308.120242
+
+Emerson, S. E., Brown, J. S., Whelan, C. J., and Schmidt, K. A. (2012). Scale-dependent neighborhood effects: shared doom and associational refuge. Oecologia, 168, 659–670. https://doi.org/10.1007/s00442-011-2144-4
+
+Hay, M. E. (1986). Associational plant defenses and the maintenance of species diversity: turning competitors into accomplices. The American Naturalist, 128, 617–641. https://doi.org/10.1086/284593
+
+Holt, R. D. (1977). Predation, apparent competition, and the structure of prey communities. Theoretical Population Biology, 12, 197–229. https://doi.org/10.1016/0040-5809(77)90042-9
+
 Nolting, B. C., Hinkelman, T. M., Brassil, C. E., and Tenhumberg, B. (2015). Composite random search strategies based on non-directional sensory cues. Ecological Complexity, 22, 126–138. https://doi.org/10.1016/j.ecocom.2015.03.002
+
+Wahl, M., and Hay, M. E. (1995). Associational resistance and shared doom: effects of epibiosis on herbivory. Oecologia, 102, 329–340. https://doi.org/10.1007/BF00329800
 
 Source: https://github.com/hinkelman/shared-predation</info>
   <turtleShapes>
