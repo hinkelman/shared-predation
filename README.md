@@ -132,7 +132,32 @@ Results from a separate set of 8,000 mixed Handle100 runs:
 - **R1 near R1: risk is highest at about the scale of an R1 cluster.** The effect peaks around sigma = 4 when R1 is spread out (radius 64). When R1 is tightly clustered (radius 8), it keeps rising to sigma 8 or beyond.
 - **R2 near R2 depends on scale and the giving-up rule.** With `Both-GUD?` off and R2 spread out (radius 64), close R2 neighbors (sigma ≤ 1) lower risk, but R2 density at sigma ≥ 4 raises it. With `Both-GUD?` on, R2 density raises risk from sigma 0.5–2 upward, depending on the setting.
 
-Both densities raise risk for every type at sigma 16–32. At that scale, a resource's density mostly reflects where it sits in the landscape, and the kernel isn't corrected at the edges. So resources nearer the center look denser in both types, and centrally placed foragers may simply find them more often. Treat the largest scales as describing position in the landscape, not neighborhood.
+Without correction, both densities raise risk for every type at sigma 16–32. The next section tests whether that is an edge effect.
+
+#### Edge effects
+
+At large scales, a resource's density mostly reflects where it sits in the landscape. The kernel isn't corrected at the edges, so resources near the center look denser in both types. Foragers start anywhere in the core but are lost at the boundary, so central resources may also simply be found more often. `analysis/edge_effects.R` tests this on the same runs by comparing three per-run models at each scale:
+
+- **Uncorrected:** as in `neighbor_scales.R`.
+- **Edge-corrected:** each density divided by the share of its Gaussian kernel that falls inside the core (±50.5). This fixes the undercounting of neighbors near edges.
+- **With position:** the uncorrected densities plus each resource's distance to the nearest core edge. This captures the direct effect of being near an edge.
+
+```bash
+Rscript analysis/edge_effects.R results/replacement-handle100-scales.csv results/additive-handle100-scales.csv
+```
+
+**Position matters a lot.** Pooled across settings, the fraction eaten rises from 21% within 5 units of the edge to 41% at the center for R1, and from 15% to 30% for R2. Each SD of distance from the edge raises the odds of being eaten by about 30% in all settings up to sigma = 16.
+
+At sigma ≤ 4 the corrections barely change the neighborhood effects, so the results at the model's `sigma` = 1 aren't edge artifacts. At sigma 16–32 (8 settings × 2 scales):
+
+| Effect | Settings that raise risk: uncorrected | Edge-corrected | With position | Interpretation |
+|---|---|---|---|---|
+| R2 near R1 (shared doom) | 16 | 16 (about 30% smaller) | 16 | Real |
+| R1 near R2 | 16 | 8 (about 65% smaller) | 14 | Mostly edge |
+| R1 near R1 | 16 | 13 (about 65% smaller) | 16 | Mostly real, weaker |
+| R2 near R2 | 16 | 0 (none in 13, lowers risk in 3) | 16 | Edge artifact |
+
+So R2 shared doom from nearby R1 holds at every scale, and it is the clearest individual-level effect in the model. R1 still gets no refuge from nearby R2, except at sigma = 0.5 in 2 of 8 settings after edge correction. The position model leaves more of the large-scale effects in place than edge correction does, so some of what remains at the largest scales may still reflect position in the landscape.
 
 ### Running headless
 
