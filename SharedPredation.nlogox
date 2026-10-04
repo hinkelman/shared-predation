@@ -4337,7 +4337,7 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </subExperiment>
       </subExperiments>
     </experiment>
-    <experiment name="SelBothFocal125Alt375_1-16" repetitions="500" sequentialRunOrder="true" runMetricsEveryStep="false" timeLimit="20000">
+    <experiment name="SelBothFocal125Alt375_Subset" repetitions="500" sequentialRunOrder="true" runMetricsEveryStep="false" timeLimit="20000">
       <setup>setup</setup>
       <go>go</go>
       <metrics>
@@ -4578,7 +4578,7 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </subExperiment>
       </subExperiments>
     </experiment>
-    <experiment name="SelBothFocal250Alt250_1-16" repetitions="500" sequentialRunOrder="true" runMetricsEveryStep="false" timeLimit="20000">
+    <experiment name="SelBothFocal250Alt250_Subset" repetitions="500" sequentialRunOrder="true" runMetricsEveryStep="false" timeLimit="20000">
       <setup>setup</setup>
       <go>go</go>
       <metrics>
@@ -4799,7 +4799,7 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </subExperiment>
       </subExperiments>
     </experiment>
-    <experiment name="SelBothFocal375Alt125_1-16" repetitions="500" sequentialRunOrder="true" runMetricsEveryStep="false" timeLimit="20000">
+    <experiment name="SelBothFocal375Alt125_Subset" repetitions="500" sequentialRunOrder="true" runMetricsEveryStep="false" timeLimit="20000">
       <setup>setup</setup>
       <go>go</go>
       <metrics>
@@ -5080,7 +5080,7 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </subExperiment>
       </subExperiments>
     </experiment>
-    <experiment name="SelR1Focal125Alt375_1-16" repetitions="500" sequentialRunOrder="true" runMetricsEveryStep="false" timeLimit="20000">
+    <experiment name="SelR1Focal125Alt375_Subset" repetitions="500" sequentialRunOrder="true" runMetricsEveryStep="false" timeLimit="20000">
       <setup>setup</setup>
       <go>go</go>
       <metrics>
@@ -5301,7 +5301,7 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </subExperiment>
       </subExperiments>
     </experiment>
-    <experiment name="SelR1Focal250Alt250_1-16" repetitions="500" sequentialRunOrder="true" runMetricsEveryStep="false" timeLimit="20000">
+    <experiment name="SelR1Focal250Alt250_Subset" repetitions="500" sequentialRunOrder="true" runMetricsEveryStep="false" timeLimit="20000">
       <setup>setup</setup>
       <go>go</go>
       <metrics>
@@ -5542,7 +5542,7 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </subExperiment>
       </subExperiments>
     </experiment>
-    <experiment name="SelR1Focal375Alt125_1-16" repetitions="500" sequentialRunOrder="true" runMetricsEveryStep="false" timeLimit="20000">
+    <experiment name="SelR1Focal375Alt125_Subset" repetitions="500" sequentialRunOrder="true" runMetricsEveryStep="false" timeLimit="20000">
       <setup>setup</setup>
       <go>go</go>
       <metrics>
