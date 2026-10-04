@@ -8,7 +8,7 @@
 # associational resistance (associational refuge).
 #
 # When the forager can only eat a roughly fixed number of a type in 20,000 ticks
-# (e.g., R2 with handling time 1000), compare mean_eaten in additive_summary.csv
+# (e.g., R2 with handling time 1000), compare mean_eaten in the _summary.csv output
 # before reading an effect as spatial.
 #
 # Usage: Rscript analysis/additive.R [results/additive.csv]
@@ -23,6 +23,7 @@ suppressPackageStartupMessages({
 args <- commandArgs(trailingOnly = TRUE)
 input <- if (length(args) > 0) args[1] else "results/additive.csv"
 out_dir <- dirname(input)
+stem <- tools::file_path_sans_ext(basename(input))   # Output files are named after the input file
 
 # BehaviorSpace table output has 6 lines of metadata before the header row
 runs <- read_csv(input, skip = 6, show_col_types = FALSE,
@@ -72,8 +73,8 @@ effects <- summary_tbl |>
                                upper < 0 ~ "resistance",
                                TRUE ~ "none"))
 
-write_csv(summary_tbl, file.path(out_dir, "additive_summary.csv"))
-write_csv(effects, file.path(out_dir, "additive_effects.csv"))
+write_csv(summary_tbl, file.path(out_dir, paste0(stem, "_summary.csv")))
+write_csv(effects, file.path(out_dir, paste0(stem, "_effects.csv")))
 
 effects |>
   select(all_of(conditions), type, neighbors, effect, lower, upper, direction) |>
@@ -108,7 +109,7 @@ p_effect <- ggplot(effects, aes(neighbors, effect, color = type,
        color = "Focal type") +
   theme_bw()
 
-ggsave(file.path(out_dir, "additive_fraction_eaten.png"), p_frac, width = 8, height = 6, dpi = 150)
-ggsave(file.path(out_dir, "additive_effects.png"), p_effect, width = 8, height = 6, dpi = 150)
+ggsave(file.path(out_dir, paste0(stem, "_fraction_eaten.png")), p_frac, width = 8, height = 6, dpi = 150)
+ggsave(file.path(out_dir, paste0(stem, "_effects.png")), p_effect, width = 8, height = 6, dpi = 150)
 
 cat(sprintf("Wrote summaries and figures to %s\n", out_dir))

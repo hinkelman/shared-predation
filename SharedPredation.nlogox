@@ -487,7 +487,7 @@ To color patches by the resource density field, run `visualize-R1-field` or `vis
 - Vary the number, clustering, energy or handling time of R2 and see how much R1 is eaten. This shows how one resource affects the other through the shared forager.
 - Vary `R1-radius` and `R2-radius` to change how closely the two resources overlap in space, and see whether shared doom or associational refuge changes with the scale of mixing.
 - Use the included BehaviorSpace experiments to sweep cluster radius, energy, handling time and selectivity.
-- Run the `Replacement` and `Additive` experiments to compare the two standard designs for associational effects ([Hambäck et al. 2014](https://doi.org/10.1890/13-0793.1)). `Replacement` holds total resources at 500 and varies the R1:R2 mix from 0:500 to 500:0. `Additive` holds one type at 250 and adds 0 to 500 of the other, with each type taking a turn as the focal type. Compare the fraction of each type eaten with its monoculture run (other type = 0). Hambäck et al. predict that replacement designs mostly show shared doom and additive designs mostly show associational refuge.
+- Run the `Replacement` and `Additive` experiments to compare the two standard designs for associational effects ([Hambäck et al. 2014](https://doi.org/10.1890/13-0793.1)). `Replacement` holds total resources at 500 and varies the R1:R2 mix from 0:500 to 500:0. `Additive` holds one type at 250 and adds 0 to 500 of the other, with each type taking a turn as the focal type. Compare the fraction of each type eaten with its monoculture run (other type = 0). Hambäck et al. predict that replacement designs mostly show shared doom and additive designs mostly show associational refuge. `Replacement-Handle100` and `Additive-Handle100` repeat both designs with an R2 handling time of 100 instead of 1000.
 
 ## EXTENDING THE MODEL
 
@@ -5982,6 +5982,221 @@ Source: https://github.com/hinkelman/shared-predation</info>
         </enumeratedValueSet>
         <enumeratedValueSet variable="R2-handle">
           <value value="1000"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="calculate-neighbors?">
+          <value value="true"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="forager-num">
+          <value value="1"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="PD?">
+          <value value="false"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="Selective?">
+          <value value="false"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="Both-GUD?">
+          <value value="true"></value>
+          <value value="false"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="extensive-mu">
+          <value value="1"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="intensive-mu">
+          <value value="3"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="rejection-density">
+          <value value="100"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="giving-up-density">
+          <value value="0.01"></value>
+        </enumeratedValueSet>
+      </constants>
+      <subExperiments>
+        <subExperiment>
+          <enumeratedValueSet variable="R1-num">
+            <value value="250"></value>
+          </enumeratedValueSet>
+          <enumeratedValueSet variable="R2-num">
+            <value value="0"></value>
+            <value value="125"></value>
+            <value value="250"></value>
+            <value value="375"></value>
+            <value value="500"></value>
+          </enumeratedValueSet>
+        </subExperiment>
+        <subExperiment>
+          <enumeratedValueSet variable="R2-num">
+            <value value="250"></value>
+          </enumeratedValueSet>
+          <enumeratedValueSet variable="R1-num">
+            <value value="0"></value>
+            <value value="125"></value>
+            <value value="375"></value>
+            <value value="500"></value>
+          </enumeratedValueSet>
+        </subExperiment>
+      </subExperiments>
+    </experiment>
+    <experiment name="Replacement-Handle100" repetitions="100" sequentialRunOrder="true" runMetricsEveryStep="false" timeLimit="20000">
+      <setup>setup</setup>
+      <go>go</go>
+      <metrics>
+        <metric>forager-count</metric>
+        <metric>total-dist</metric>
+        <metric>handling-time</metric>
+        <metric>resource-rejections</metric>
+        <metric>energy-gained</metric>
+        <metric>count resources with [resource-type = "R1"]</metric>
+        <metric>count resources with [resource-type = "R2"]</metric>
+        <metric>death-times</metric>
+        <metric>type-eaten</metric>
+        <metric>R1-neighbor-list</metric>
+        <metric>R2-neighbor-list</metric>
+        <metric>both-neighbor-list</metric>
+      </metrics>
+      <constants>
+        <enumeratedValueSet variable="R1-clusters">
+          <value value="15"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R2-clusters">
+          <value value="15"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R1-radius">
+          <value value="8"></value>
+          <value value="64"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R2-radius">
+          <value value="8"></value>
+          <value value="64"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R1-energy">
+          <value value="100"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R2-energy">
+          <value value="10"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R1-handle">
+          <value value="10"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R2-handle">
+          <value value="100"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="calculate-neighbors?">
+          <value value="true"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="forager-num">
+          <value value="1"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="PD?">
+          <value value="false"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="Selective?">
+          <value value="false"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="Both-GUD?">
+          <value value="true"></value>
+          <value value="false"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="extensive-mu">
+          <value value="1"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="intensive-mu">
+          <value value="3"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="rejection-density">
+          <value value="100"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="giving-up-density">
+          <value value="0.01"></value>
+        </enumeratedValueSet>
+      </constants>
+      <subExperiments>
+        <subExperiment>
+          <enumeratedValueSet variable="R1-num">
+            <value value="0"></value>
+          </enumeratedValueSet>
+          <enumeratedValueSet variable="R2-num">
+            <value value="500"></value>
+          </enumeratedValueSet>
+        </subExperiment>
+        <subExperiment>
+          <enumeratedValueSet variable="R1-num">
+            <value value="125"></value>
+          </enumeratedValueSet>
+          <enumeratedValueSet variable="R2-num">
+            <value value="375"></value>
+          </enumeratedValueSet>
+        </subExperiment>
+        <subExperiment>
+          <enumeratedValueSet variable="R1-num">
+            <value value="250"></value>
+          </enumeratedValueSet>
+          <enumeratedValueSet variable="R2-num">
+            <value value="250"></value>
+          </enumeratedValueSet>
+        </subExperiment>
+        <subExperiment>
+          <enumeratedValueSet variable="R1-num">
+            <value value="375"></value>
+          </enumeratedValueSet>
+          <enumeratedValueSet variable="R2-num">
+            <value value="125"></value>
+          </enumeratedValueSet>
+        </subExperiment>
+        <subExperiment>
+          <enumeratedValueSet variable="R1-num">
+            <value value="500"></value>
+          </enumeratedValueSet>
+          <enumeratedValueSet variable="R2-num">
+            <value value="0"></value>
+          </enumeratedValueSet>
+        </subExperiment>
+      </subExperiments>
+    </experiment>
+    <experiment name="Additive-Handle100" repetitions="100" sequentialRunOrder="true" runMetricsEveryStep="false" timeLimit="20000">
+      <setup>setup</setup>
+      <go>go</go>
+      <metrics>
+        <metric>forager-count</metric>
+        <metric>total-dist</metric>
+        <metric>handling-time</metric>
+        <metric>resource-rejections</metric>
+        <metric>energy-gained</metric>
+        <metric>count resources with [resource-type = "R1"]</metric>
+        <metric>count resources with [resource-type = "R2"]</metric>
+        <metric>death-times</metric>
+        <metric>type-eaten</metric>
+        <metric>R1-neighbor-list</metric>
+        <metric>R2-neighbor-list</metric>
+        <metric>both-neighbor-list</metric>
+      </metrics>
+      <constants>
+        <enumeratedValueSet variable="R1-clusters">
+          <value value="15"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R2-clusters">
+          <value value="15"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R1-radius">
+          <value value="8"></value>
+          <value value="64"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R2-radius">
+          <value value="8"></value>
+          <value value="64"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R1-energy">
+          <value value="100"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R2-energy">
+          <value value="10"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R1-handle">
+          <value value="10"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R2-handle">
+          <value value="100"></value>
         </enumeratedValueSet>
         <enumeratedValueSet variable="calculate-neighbors?">
           <value value="true"></value>

@@ -69,6 +69,14 @@ These experiments compare the two standard designs from [Hambäck et al. 2014](h
 
 Both use R2 energy 10 and handling time 1000, and cross `R1-radius` and `R2-radius` {8, 64} with `Both-GUD?` on and off. They use 100 repetitions, a giving-up density of 0.01, and record neighbor lists.
 
+With a handling time of 1000, the forager can eat only about 20 R2 per run, so handling time drives most of the effects. **`Replacement-Handle100`** and **`Additive-Handle100`** are identical except that R2 handling time is 100.
+
+To analyze an experiment, pass its output to the matching script in `analysis/`. The scripts name their outputs after the input file:
+
+```bash
+Rscript analysis/replacement.R results/replacement-handle100.csv
+```
+
 ### Running headless
 
 To run an experiment from the command line:
