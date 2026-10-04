@@ -190,7 +190,7 @@ Rscript analysis/selective.R results/selective-handlesweep.csv
 | 200 | 8 of 24 | +9.4% | 0.03 |
 
 - **Selectivity pays mainly when R2 is slow to handle.** As handling time rises, the best rule rejects R2 at lower R1 densities. At handling time 200, this sweep suggested selectivity paid most when R1 was common, but the Handle200 rerun below shows that R1 clustering matters more.
-- **Selectivity gives R2 a behavioral refuge.** At the best threshold, the fraction of R2 eaten falls by a median of about 3 percentage points, and by 7–8 points when R1 is common. This happens even where selectivity doesn't pay in energy. The fraction of R1 eaten rises by 1–5 points, because the forager spends the saved time finding R1. Unlike the handling-time refuges in the associational-effect designs, this one comes from the forager's choices.
+- **Selectivity gives R2 a behavioral refuge** (but see the low-rejection rerun below). At the best threshold, the fraction of R2 eaten falls by a median of about 3 percentage points, and by 7–8 points when R1 is common. This happens even where selectivity doesn't pay in energy. The fraction of R1 eaten rises by 1–5 points, because the forager spends the saved time finding R1. Unlike the handling-time refuges in the associational-effect designs, this one comes from the forager's choices.
 - **The comparisons are noisy.** With 10 repetitions per half, the standard error of the gain is often 200–1,500 energy units, about as large as the gains. The best thresholds are scattered across the grid, which suggests the energy surface is fairly flat near its peak.
 
 #### Handle200 rerun
@@ -211,10 +211,45 @@ With more repetitions, selectivity clearly pays in 16 of 24 conditions (8 of 24 
 
 - **R1 clustering decides whether selectivity pays.** With R1 spread out (radius 64), it pays in all 12 conditions, with median gains of 15–16%. With R1 tightly clustered (radius 8), it pays only at the 250:250 mix. With 125 R1 the gains are positive but uncertain, and with 375 R1 none are clear.
 - **`Both-GUD?` makes no difference.** Selectivity pays in 8 conditions with each setting, with median gains of 13–14%.
-- **The best threshold is the lowest one tried.** 15 of 24 conditions chose `rejection-density` 0.01, meaning the forager does best rejecting R2 even where R1 is sparse. The optimum may be lower still, so the grid should extend down to about 0.001.
+- **The best threshold is the lowest one tried.** 15 of 24 conditions chose `rejection-density` 0.01, meaning the forager does best rejecting R2 even where R1 is sparse. The low-rejection rerun below shows that the optimum is lower still.
 - **The R2 refuge is clear and grows with R1.** The fraction of R2 eaten falls by 1–13 percentage points. It is largest with common, spread-out R1: 10–13 points at 375:125 with R1 radius 64. The fraction of R1 eaten rises by up to 6 points.
 
-Next steps would be extending the rejection grid below 0.01, and collecting neighbor data to test whether R2 next to dense R1 is protected individually.
+#### Low-rejection rerun
+
+**`Selective-Handle200-Low`** repeats `Selective-Handle200` with `rejection-density` {0, 1e-4, 3e-4, 1e-3, 3e-3, 0.01, 0.03}, plus 1000 for never reject. At 0, the forager rejects R2 wherever R1 density is above zero, which is almost everywhere. That's 76,800 runs, about an hour headless.
+
+```bash
+Rscript analysis/selective.R results/selective-handle200-low.csv
+```
+
+**The best rule is to reject R2 essentially always.** A rejection density of 0 wins in all 24 conditions and clearly pays in every one, with a median energy gain of 51%. Almost no R2 is eaten.
+
+Gain over never rejecting, median across conditions:
+
+| Rejection density | R1 radius 8 | R1 radius 64 | Fraction of R2 eaten (radius 8 / 64) |
+|---|---|---|---|
+| 0 | +48% | +54% | 0.002 / 0.000 |
+| 1e-4 | +15% | +23% | 0.13 / 0.09 |
+| 1e-3 | +10% | +20% | 0.14 / 0.11 |
+| 0.01 | +11% | +15% | 0.14 / 0.13 |
+| 0.03 | +10% | +15% | 0.15 / 0.13 |
+| never | 0 | 0 | 0.18 / 0.19 |
+
+At the two thresholds it shares with `Selective-Handle200` (0.01 and 0.03), the results agree closely.
+
+This is the classic prey model of optimal diet theory: a prey type should be ignored whenever its profitability (energy ÷ handling time) is below the intake rate of a forager that ignores it.
+
+- A forager that rejects all R2 gains 0.22–0.90 energy per tick, depending on R1 abundance.
+- R2 gives 10 energy for 200 ticks of handling, or 0.05 per tick, so eating any R2 is a loss.
+- The density threshold pays only insofar as it approximates never eating R2.
+
+Even at handling time 50, R2's 0.2 per tick is below the lowest specialist rate. So none of the selective experiments so far include a case where eating R2 is worthwhile.
+
+The jump between thresholds 0 and 1e-4 happens because many R2 lie far enough from R1 that their R1 density is tiny but above zero. A threshold of 1e-4 lets the forager eat those R2, while 0 rejects them too.
+
+This changes how to read the selective results above. In these experiments, the R2 "behavioral refuge" is R2 being dropped from the diet altogether. At the best threshold, R2 avoids shared doom only because it isn't eaten at all.
+
+A density-dependent rejection rule matters only when R2 is profitable enough to be eaten some of the time: profitability near the specialist intake rate (about 0.2–0.9 per tick here). Getting there needs a shorter R2 handling time (about 10–40 with energy 10) or more R2 energy, with rejection density 0 in the grid. The other open question is whether R2 next to dense R1 is protected individually, which needs neighbor data.
 
 ### Running headless
 
