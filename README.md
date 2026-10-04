@@ -26,6 +26,21 @@ Optional behaviors:
 
 The model tracks total distance moved, handling time, energy gained, the number of R2 resources rejected, and how many of each resource type remain.
 
+## Findings
+
+The results so far, with links to the details under [Experiments](#experiments):
+
+1. **The landscape-level designs reproduce the patterns Hambäck et al. predicted.** In the replacement design, R1 gets an associational refuge and R2 suffers shared doom. In the additive design, both types get a refuge. With an R2 handling time of 1000, these effects come almost entirely from the time the forager spends handling R2. With a handling time of 100 they are weaker, and clustering and the giving-up rule start to matter. ([Associational-effect designs](#associational-effect-designs))
+2. **Individually, R2 near R1 suffers shared doom, and R1 gets no refuge from R2.** For an opportunistic forager, nearby R1 raises an R2's risk at nearly every scale from sigma 0.5 to 32, and this survives edge correction. It's the clearest neighborhood effect in the model. Nearby R2 never protects R1 to any meaningful degree. So R1's landscape-level refuge is a time-budget effect, not a neighborhood effect. ([Neighbor analysis](#neighbor-analysis), [Multiple scales](#multiple-scales))
+3. **Clumping with your own type depends on the scale and the giving-up rule.** R1 in dense R1 patches are at higher risk, peaking at about the scale of an R1 cluster (sigma ≈ 4). R2 clumps raise R2's risk only when the giving-up decision counts R2 density. Otherwise, clumping lowers it or has no effect.
+4. **Position in the landscape matters, so densities are edge-corrected.** Resources near the edge of the core are eaten about half as often as central ones. Without correction, that made every density look risky at large scales. ([Edge effects](#edge-effects))
+5. **Whether to eat R2 follows the logic of optimal diet theory.** When R2's profitability is far below what a forager earns by ignoring it, dropping R2 entirely pays: 51% more energy at handling time 200. When R2 is profitable, eating it is best. The switch comes at lower R2 profitability than the classic prey model predicts, because rejecting R2 costs time. Rejecting R2 only where R1 is dense never beats the simpler choice of eating or skipping R2 everywhere. ([Low-rejection rerun](#low-rejection-rerun), [Profitability sweep](#profitability-sweep))
+6. **A selective forager turns shared doom for R2 into an associational refuge.** When the forager rejects R2 where R1 is dense, R2 near R1 becomes safer: at the strictest threshold tested, each SD of nearby R1 cuts an R2's odds of being eaten by about 90% at sigma = 2. R1 is unaffected. ([Selective neighbor analysis](#selective-neighbor-analysis))
+
+So whether a low-quality resource suffers shared doom or gains a refuge from a preferred neighbor depends on the forager's diet choice. Opportunistic foragers cause shared doom. Selective foragers create a refuge through their choices. The preferred resource's refuge seen across whole landscapes comes from handling time, not from its neighbors.
+
+These results come from a single forager searching for 20,000 ticks, with fixed movement parameters and no resource regrowth or population dynamics. They describe foraging outcomes, not long-term consequences for the resource populations.
+
 ## Usage
 
 Requires [NetLogo 7.0.4](https://ccl.northwestern.edu/netlogo/) or later. Open `SharedPredation.nlogox`, click **setup**, then click **go**. The model includes BehaviorSpace experiments, described below.
