@@ -117,6 +117,23 @@ Compared with the landscape-level designs:
 
 About 3% of runs in a few settings were skipped because too few resources were eaten, or survived, to fit.
 
+#### Multiple scales
+
+The model measures neighborhoods with the forager's `sigma`, which also sets how the forager perceives density, so changing it would change behavior. Instead, the model records `eaten-coords` and the Handle100 experiments record survivors' coordinates. `analysis/neighbor_scales.R` uses these to rebuild each landscape and recalculate densities with the model's kernel at sigma = 0.5, 1, 2, 4, 8, 16 and 32, while the forager's own `sigma` stays at 1. It then fits the same per-run regressions at each scale. At sigma = 1 its densities match the model's to within 4e-4, which comes from rounding the coordinates.
+
+```bash
+Rscript analysis/neighbor_scales.R results/replacement-handle100-scales.csv results/additive-handle100-scales.csv
+```
+
+Results from a separate set of 8,000 mixed Handle100 runs:
+
+- **R1 near R2: no associational refuge at any scale.** The only negative effect is at sigma = 0.5 in one setting (both radii 8, `Both-GUD?` off). Otherwise, nearby R2 has no effect at the finest scales and raises R1's risk from somewhere between sigma 1 and 8 upward, depending on the setting.
+- **R2 near R1: shared doom at every scale,** in all 8 settings except sigma = 0.5 with R1 radius 64, R2 radius 8 and `Both-GUD?` on. The effect grows with scale. When R1 is spread out (radius 64), it is weak at sigma = 0.5 and levels off from sigma = 4.
+- **R1 near R1: risk is highest at about the scale of an R1 cluster.** The effect peaks around sigma = 4 when R1 is spread out (radius 64). When R1 is tightly clustered (radius 8), it keeps rising to sigma 8 or beyond.
+- **R2 near R2 depends on scale and the giving-up rule.** With `Both-GUD?` off and R2 spread out (radius 64), close R2 neighbors (sigma ≤ 1) lower risk, but R2 density at sigma ≥ 4 raises it. With `Both-GUD?` on, R2 density raises risk from sigma 0.5–2 upward, depending on the setting.
+
+Both densities raise risk for every type at sigma 16–32. At that scale, a resource's density mostly reflects where it sits in the landscape, and the kernel isn't corrected at the edges. So resources nearer the center look denser in both types, and centrally placed foragers may simply find them more often. Treat the largest scales as describing position in the landscape, not neighborhood.
+
 ### Running headless
 
 To run an experiment from the command line:
