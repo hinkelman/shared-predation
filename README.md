@@ -49,7 +49,7 @@ These 12 experiments have no suffix (for example `OppBothFocal125Alt375`). They 
 - **`Opp*`**: sweep `giving-up-density` from 1e-7 to 10 (9 levels). 100 repetitions, 14,400 runs each.
 - **`Sel*`**: also sweep `rejection-density` over the same 9 levels. 20 repetitions, 25,920 runs each.
 
-These runs record totals only, not neighbor lists.
+These runs record totals only, not neighbor lists. For selectivity, [Selective foraging](#selective-foraging) uses better handling times and thresholds.
 
 ### Neighborhood runs
 
@@ -164,6 +164,36 @@ At sigma ≤ 4 the corrections barely change the neighborhood effects, so the re
 | R2 near R2 | 16 | 0 (none in 13, lowers risk in 3) | 16 | Edge artifact |
 
 So R2 shared doom from nearby R1 holds at every scale, and it is the clearest individual-level effect in the model. R1 still gets no refuge from nearby R2, except at sigma = 0.5 in 2 of 8 settings after edge correction. The position model leaves more of the large-scale effects in place than edge correction does, so some of what remains at the largest scales may still reflect position in the landscape.
+
+### Selective foraging
+
+The `Sel*` sweeps above use R2 handling times of 10, where rejecting R2 rarely pays, and 1000, where the best rule rejects nearly all R2. Most of their rejection thresholds sit in a range where R1 density barely changes behavior. **`Selective-HandleSweep`** uses:
+
+- `R2-handle` {50, 100, 200}, with `R2-energy` 10.
+- `rejection-density` {0.01, 0.03, 0.1, 0.3, 1, 3, 10}, which covers where R1 density actually varies at R2 locations, plus 1000 meaning "never reject" as the non-selective baseline.
+- `giving-up-density` {1e-4, 1e-3, 0.01, 0.1, 1}.
+- Both radii {8, 64}, `Both-GUD?` on and off, and three R1:R2 mixes (125:375, 250:250, 375:125) as subexperiments.
+- 20 repetitions: 57,600 runs, about 45 minutes headless.
+
+`analysis/selective.R` takes, for each condition and rejection threshold, the giving-up density that maximizes energy gained. It then compares the best selective threshold with never rejecting. Choosing the best of many noisy combinations inflates its mean, so thresholds are chosen on odd-numbered runs and evaluated on even-numbered runs.
+
+```bash
+Rscript analysis/selective.R results/selective-handlesweep.csv
+```
+
+#### Results
+
+| R2 handling time | Conditions where selectivity clearly pays | Median energy gain | Median best rejection density |
+|---|---|---|---|
+| 50 | 3 of 24 | −0.1% | 0.3 |
+| 100 | 0 of 24 | +2.4% | 0.1 |
+| 200 | 8 of 24 | +9.4% | 0.03 |
+
+- **Selectivity pays mainly when R2 is slow to handle and R1 is common.** With handling time 200 and an R1:R2 mix of 375:125, the median gain is 16%, and 5 of 8 conditions clearly pay. As handling time rises, the best rule rejects R2 at lower R1 densities.
+- **Selectivity gives R2 a behavioral refuge.** At the best threshold, the fraction of R2 eaten falls by a median of about 3 percentage points, and by 7–8 points when R1 is common. This happens even where selectivity doesn't pay in energy. The fraction of R1 eaten rises by 1–5 points, because the forager spends the saved time finding R1. Unlike the handling-time refuges in the associational-effect designs, this one comes from the forager's choices.
+- **The comparisons are noisy.** With 10 repetitions per half, the standard error of the gain is often 200–1,500 energy units, about as large as the gains. The best thresholds are scattered across the grid, which suggests the energy surface is fairly flat near its peak.
+
+Next steps would be more repetitions where selectivity pays (handling time 200, R1 common), and neighbor data to test whether R2 next to dense R1 is protected individually.
 
 ### Running headless
 
