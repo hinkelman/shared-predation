@@ -417,8 +417,6 @@ The model is aimed at shared predation: indirect interactions between two resour
 
 Because resources are clustered in space, these effects can also appear as neighborhood (associational) effects, where a resource's risk of being eaten depends on what is around it. In *shared doom*, also called associational susceptibility, living near a preferred resource raises the chance of being eaten (Wahl and Hay 1995; Emerson et al. 2012). In an *associational refuge*, also called associational resistance, neighbors lower that chance (Hay 1986; Barbosa et al. 2009). Emerson et al. (2012) showed that which effect appears depends on the consumer's diet choice and on the spatial scale at which the resources are mixed.
 
-The model is unfinished and exploratory.
-
 ## HOW IT WORKS
 
 ### Landscape
@@ -533,7 +531,7 @@ To color patches by the resource density field, run `visualize-R1-field` or `vis
 
 ## FINDINGS
 
-These are the results so far from the BehaviorSpace experiments. The project README (https://github.com/hinkelman/shared-predation) has the details, analysis scripts and figures.
+These are the main results from the BehaviorSpace experiments. The project README (https://github.com/hinkelman/shared-predation) has the details, analysis scripts and figures.
 
 1. **The landscape-level designs reproduce the patterns Hambäck et al. predicted.** In the replacement design, R1 gets an associational refuge and R2 suffers shared doom. In the additive design, both types get a refuge. With an R2 handling time of 1000, these effects come almost entirely from the time the forager spends handling R2. With a handling time of 100 they are weaker, and clustering and the giving-up rule start to matter.
 2. **Individually, R2 near R1 suffers shared doom, and R1 gets no refuge from R2.** For an opportunistic forager, nearby R1 raises an R2's risk at nearly every scale, and this survives edge correction. It's the clearest neighborhood effect in the model. Nearby R2 never meaningfully protects R1, so R1's landscape-level refuge is a time-budget effect, not a neighborhood effect.
@@ -541,8 +539,9 @@ These are the results so far from the BehaviorSpace experiments. The project REA
 4. **Position in the landscape matters.** Resources near the edge of the core are eaten about half as often as central ones, so neighborhood densities at large scales need edge correction.
 5. **Whether to eat R2 follows the logic of optimal diet theory.** When R2's profitability (energy / handling time) is far below what a forager earns by ignoring it, dropping R2 entirely pays: 51% more energy at an R2 handling time of 200. When R2 is profitable, eating it is best. The switch comes at lower profitability than the classic prey model predicts, because each rejection costs a tick and resets the forager's step. Rejecting R2 only where R1 is dense never beats the simpler choice of eating or skipping R2 everywhere.
 6. **A selective forager turns shared doom for R2 into an associational refuge.** When the forager rejects R2 where R1 is dense, R2 near R1 becomes safer. At the strictest threshold tested, each SD of nearby R1 cuts an R2's odds of being eaten by about 90%. R1 is unaffected.
+7. **How much the two types overlap decides the landscape-level outcome for R2.** With an opportunistic forager, R2 gets a refuge when R1 and R2 clusters are separated (`cluster-overlap` below 0), but suffers shared doom when they share clusters (`cluster-overlap` near 1). With a selective forager, R2's refuge grows several-fold as overlap increases, and R1's refuge weakens.
 
-So whether a low-quality resource suffers shared doom or gains a refuge from a preferred neighbor depends on the forager's diet choice. Opportunistic foragers cause shared doom; selective foragers create a refuge through their choices. The preferred resource's refuge across whole landscapes comes from handling time, not from its neighbors.
+So whether a low-quality resource suffers shared doom or gains a refuge from a preferred neighbor depends on the forager's diet choice and on how much the two resources overlap. Opportunistic foragers cause shared doom, most strongly where the types share clusters; selective foragers create a refuge through their choices, and overlap strengthens it. The preferred resource's refuge across whole landscapes comes from handling time, not from its neighbors.
 
 These results come from a single forager searching for 20,000 ticks, with fixed movement parameters and no resource regrowth or population dynamics. They describe foraging outcomes, not long-term consequences for the resource populations.
 

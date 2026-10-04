@@ -1,6 +1,6 @@
 # Shared Predation
 
-An incomplete NetLogo model that extends the composite random search model in [Nolting et al. 2015](https://doi.org/10.1016/j.ecocom.2015.03.002) ([code](https://github.com/hinkelman/composite-random-search)) to include a second resource type and examine shared predation: indirect interactions between two resource types that are eaten by the same forager.
+A NetLogo model that extends the composite random search model in [Nolting et al. 2015](https://doi.org/10.1016/j.ecocom.2015.03.002) ([code](https://github.com/hinkelman/composite-random-search)) to include a second resource type and examine shared predation: indirect interactions between two resource types that are eaten by the same forager.
 
 Because the resources are clustered in space, these interactions can show up as neighborhood effects, where a resource's risk of being eaten depends on what is near it:
 
@@ -28,7 +28,7 @@ The model tracks total distance moved, handling time, energy gained, the number 
 
 ## Findings
 
-The results so far, with links to the details under [Experiments](#experiments):
+The main results, with links to the details under [Experiments](#experiments):
 
 1. **The landscape-level designs reproduce the patterns Hambäck et al. predicted.** In the replacement design, R1 gets an associational refuge and R2 suffers shared doom. In the additive design, both types get a refuge. With an R2 handling time of 1000, these effects come almost entirely from the time the forager spends handling R2. With a handling time of 100 they are weaker, and clustering and the giving-up rule start to matter. ([Associational-effect designs](#associational-effect-designs))
 2. **Individually, R2 near R1 suffers shared doom, and R1 gets no refuge from R2.** For an opportunistic forager, nearby R1 raises an R2's risk at nearly every scale from sigma 0.5 to 32, and this survives edge correction. It's the clearest neighborhood effect in the model. Nearby R2 never protects R1 to any meaningful degree. So R1's landscape-level refuge is a time-budget effect, not a neighborhood effect. ([Neighbor analysis](#neighbor-analysis), [Multiple scales](#multiple-scales))
@@ -36,8 +36,9 @@ The results so far, with links to the details under [Experiments](#experiments):
 4. **Position in the landscape matters, so densities are edge-corrected.** Resources near the edge of the core are eaten about half as often as central ones. Without correction, that made every density look risky at large scales. ([Edge effects](#edge-effects))
 5. **Whether to eat R2 follows the logic of optimal diet theory.** When R2's profitability is far below what a forager earns by ignoring it, dropping R2 entirely pays: 51% more energy at handling time 200. When R2 is profitable, eating it is best. The switch comes at lower R2 profitability than the classic prey model predicts, because rejecting R2 costs time. Rejecting R2 only where R1 is dense never beats the simpler choice of eating or skipping R2 everywhere. ([Low-rejection rerun](#low-rejection-rerun), [Profitability sweep](#profitability-sweep))
 6. **A selective forager turns shared doom for R2 into an associational refuge.** When the forager rejects R2 where R1 is dense, R2 near R1 becomes safer: at the strictest threshold tested, each SD of nearby R1 cuts an R2's odds of being eaten by about 90% at sigma = 2. R1 is unaffected. ([Selective neighbor analysis](#selective-neighbor-analysis))
+7. **How much the two types overlap decides the landscape-level outcome for R2.** With an opportunistic forager, R2 gets a refuge when the types are separated, but suffers shared doom when they share clusters. With a selective forager, R2's refuge grows several-fold as overlap increases, and R1's refuge weakens. ([Cluster overlap](#cluster-overlap))
 
-So whether a low-quality resource suffers shared doom or gains a refuge from a preferred neighbor depends on the forager's diet choice. Opportunistic foragers cause shared doom. Selective foragers create a refuge through their choices. The preferred resource's refuge seen across whole landscapes comes from handling time, not from its neighbors.
+So whether a low-quality resource suffers shared doom or gains a refuge from a preferred neighbor depends on the forager's diet choice and on how much the two resources overlap. Opportunistic foragers cause shared doom, most strongly where the types share clusters. Selective foragers create a refuge through their choices, and overlap strengthens it. The preferred resource's refuge seen across whole landscapes comes from handling time, not from its neighbors.
 
 These results come from a single forager searching for 20,000 ticks, with fixed movement parameters and no resource regrowth or population dynamics. They describe foraging outcomes, not long-term consequences for the resource populations.
 
@@ -258,7 +259,7 @@ This is the classic prey model of optimal diet theory: a prey type should be ign
 - R2 gives 10 energy for 200 ticks of handling, or 0.05 per tick, so eating any R2 is a loss.
 - The density threshold pays only insofar as it approximates never eating R2.
 
-Even at handling time 50, R2's 0.2 per tick is below the lowest specialist rate. So none of the selective experiments so far include a case where eating R2 is worthwhile.
+Even at handling time 50, R2's 0.2 per tick is below the lowest specialist rate. So none of the selective experiments above include a case where eating R2 is worthwhile.
 
 The jump between thresholds 0 and 1e-4 happens because many R2 lie far enough from R1 that their R1 density is tiny but above zero. A threshold of 1e-4 lets the forager eat those R2, while 0 rejects them too.
 
@@ -334,6 +335,40 @@ Together with the earlier results:
 - **An opportunistic forager** causes shared doom for R2 near R1, at the individual level and in replacement designs.
 - **A selective forager** gives R2 near R1 an associational refuge that comes from its choices. The R1 refuges seen elsewhere instead come from handling time.
 
+### Cluster overlap
+
+By default, R1 and R2 cluster centers are placed independently, so how much the types overlap varies by chance between runs. `cluster-overlap` controls it (see [Overview](#overview)). **`Overlap-Handle100`** varies it:
+
+- `cluster-overlap` {−1, −0.5, 0, 0.5, 1}, with both radii 8, where overlap has the most effect.
+- R2 energy 10 and handling time 100.
+- R1:R2 at 250:0, 0:250 and 250:250. The monocultures are the controls, pooled across overlap levels because overlap can't matter without the other type.
+- An opportunistic forager and a selective one (rejection density 0.01).
+- `Both-GUD?` on and off, and giving-up density 0.01.
+- The Handle100 neighbor and coordinate metrics, with 100 repetitions: 6,000 runs, about 5 minutes headless.
+
+`analysis/overlap.R` gives the landscape-level effect at each overlap: the fraction eaten in the 250:250 mix minus the fraction eaten alone. It also reports realized mixing. Run `neighbor_scales.R` on the same file first, and it adds the individual-level coefficients.
+
+```bash
+Rscript analysis/neighbor_scales.R results/overlap-handle100.csv
+Rscript analysis/overlap.R results/overlap-handle100.csv
+```
+
+Mean R1 density at R2 locations rises from 0.000 at overlap −1, through 0.061 at 0, to 0.550 at +1.
+
+Landscape-level effects, from separated clusters (−1) to shared clusters (+1):
+
+| Forager | Type | `Both-GUD?` off | `Both-GUD?` on |
+|---|---|---|---|
+| Opportunistic | R2 | −0.066 → +0.066 (refuge flips to shared doom) | −0.04 → 0.01 (refuge disappears) |
+| Opportunistic | R1 | −0.09 → −0.15 (refuge strengthens) | −0.13 to −0.16 throughout |
+| Selective | R2 | −0.06 → −0.19 (refuge strengthens) | −0.03 → −0.24 (refuge strengthens) |
+| Selective | R1 | −0.08 → −0.03 (refuge weakens) | −0.15 → −0.05 (refuge weakens) |
+
+- **With an opportunistic forager, overlap decides whether R2 gets a refuge or suffers shared doom.** When the types are separated, R2 benefits from R1 taking up the forager's time elsewhere. When they share clusters, the forager's intensive search in R1 patches sweeps up the R2 there. With `Both-GUD?` off, the effect changes sign between overlap 0 and 0.5. This is the individual-level shared doom showing up across the whole landscape.
+- **With a selective forager, overlap strengthens R2's refuge and weakens R1's.** The more R2 sits inside R1 clusters, the more of it the forager rejects. R2's refuge grows about 3–8 times from separated to shared clusters. The forager spends that saved time on the R1 around it.
+- **Individual level:** for an opportunistic forager, R2 near R1 suffers shared doom at every overlap from −0.5 to +1. It's weaker at +1, where nearly every R2 has R1 neighbors, so there's less contrast between R2 with and without them. For a selective forager, R2 near R1 has a strong refuge at every overlap. R1's effects are small and mixed.
+- At overlap −1, almost no resource has neighbors of the other type, so the individual-level effects can't be estimated. `overlap.R` drops cells with fewer than 30 fitted runs.
+
 ### Running headless
 
 To run an experiment from the command line:
@@ -344,25 +379,18 @@ To run an experiment from the command line:
 
 Experiments with subexperiments write all their runs to one file. Use the parameter columns to tell the conditions apart.
 
-## Status
+## Scope and limitations
 
-This is an exploratory model, still in progress. See the Info tab in the model for full documentation.
+See the Info tab in the model for full documentation of the model itself.
 
-**Done so far:**
+The R scripts in `analysis/` reproduce every summary and figure from the BehaviorSpace output. Model output in `results/` is not committed; rerun the experiments headless to regenerate it.
 
-- Landscape-level replacement and additive designs at R2 handling times of 1000 and 100.
-- Individual-level neighbor analysis at multiple scales, with edge correction.
-- Selective foraging across R2 handling times and profitabilities.
-- A neighbor analysis of selective foragers.
+**Older experiments.** The threshold sweeps (`Opp*`, `Sel*`) and neighborhood runs (`Opp*_1-16`, `Sel*_Subset`) come from the original design and are kept for reference. Their R2 handling times (10 and 1000) leave little room for real trade-offs, the `Sel*` grids miss the rejection thresholds that matter, and the neighborhood runs don't record survivors. The `Selective-*`, Handle100 and `Overlap-Handle100` experiments supersede them.
 
-The [Findings](#findings) section summarizes the results. The R scripts in `analysis/` reproduce every summary and figure from the BehaviorSpace output. Model output in `results/` is not committed; rerun the experiments headless to regenerate it.
+**Limitations:**
 
-**Older experiments.** The threshold sweeps (`Opp*`, `Sel*`) and neighborhood runs (`Opp*_1-16`, `Sel*_Subset`) come from the original design and are kept for reference. Their R2 handling times (10 and 1000) leave little room for real trade-offs, the `Sel*` grids miss the rejection thresholds that matter, and the neighborhood runs don't record survivors. The `Selective-*` and Handle100 experiments supersede them.
-
-**Open questions and limitations:**
-
-- **Spatial association between types.** By default, R1 and R2 cluster centers are placed independently, so how much the types overlap varies by chance between runs. The `cluster-overlap` setting now controls this, but no experiment uses it yet. It has the most effect when clusters are tight (radius 8).
 - **Consumer density.** All experiments use one forager. [Merwin et al. (2017)](https://doi.org/10.1002/ecy.2004) found that neighborhood effects weaken as consumer density rises, which multiple foragers could test.
 - **Population consequences.** Resources don't regrow and there are no population dynamics, so the results describe foraging outcomes over 20,000 ticks, not long-term effects on R1 and R2.
-- **Giving-up density.** The associational-effect and neighbor experiments use a fixed giving-up density of 0.01, not the forager's best response in each condition.
+- **Giving-up density.** The associational-effect, neighbor and overlap experiments use a fixed giving-up density of 0.01, not the forager's best response in each condition.
 - **Rejection rule.** Foragers judge R1 density at their own `sigma` of 1. Other scales, or a rule based on recent intake rate instead of local R1 density, might make density-dependent selectivity worthwhile.
+- **Overlap.** `cluster-overlap` has been tested only with both radii at 8, one R1:R2 mix (250:250) and one handling time.
