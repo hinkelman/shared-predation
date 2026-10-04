@@ -119,7 +119,9 @@ About 3% of runs in a few settings were skipped because too few resources were e
 
 #### Multiple scales
 
-The model measures neighborhoods with the forager's `sigma`, which also sets how the forager perceives density, so changing it would change behavior. Instead, the model records `eaten-coords` and the Handle100 experiments record survivors' coordinates. `analysis/neighbor_scales.R` uses these to rebuild each landscape and recalculate densities with the model's kernel at sigma = 0.5, 1, 2, 4, 8, 16 and 32, while the forager's own `sigma` stays at 1. It then fits the same per-run regressions at each scale. At sigma = 1 its densities match the model's to within 4e-4, which comes from rounding the coordinates.
+The model measures neighborhoods with the forager's `sigma`, which also sets how the forager perceives density, so changing it would change behavior. Instead, the model records `eaten-coords` and the Handle100 experiments record survivors' coordinates. `analysis/neighbor_scales.R` uses these to rebuild each landscape and recalculate densities with the model's kernel at sigma = 0.5, 1, 2, 4, 8, 16 and 32, while the forager's own `sigma` stays at 1. It then fits the same per-run regressions at each scale. At sigma = 1 its uncorrected densities match the model's to within 4e-4, which comes from rounding the coordinates.
+
+By default, the script edge-corrects densities: each is divided by the share of its kernel that falls inside the core (see [Edge effects](#edge-effects)). Add `--uncorrected` to use the model's kernel as is; the outputs are then named `neighbor_scales_uncorrected_*`.
 
 ```bash
 Rscript analysis/neighbor_scales.R results/replacement-handle100-scales.csv results/additive-handle100-scales.csv
@@ -138,7 +140,7 @@ Without correction, both densities raise risk for every type at sigma 16–32. T
 
 At large scales, a resource's density mostly reflects where it sits in the landscape. The kernel isn't corrected at the edges, so resources near the center look denser in both types. Foragers start anywhere in the core but are lost at the boundary, so central resources may also simply be found more often. `analysis/edge_effects.R` tests this on the same runs by comparing three per-run models at each scale:
 
-- **Uncorrected:** as in `neighbor_scales.R`.
+- **Uncorrected:** as in `neighbor_scales.R --uncorrected`.
 - **Edge-corrected:** each density divided by the share of its Gaussian kernel that falls inside the core (±50.5). This fixes the undercounting of neighbors near edges.
 - **With position:** the uncorrected densities plus each resource's distance to the nearest core edge. This captures the direct effect of being near an edge.
 

@@ -8,16 +8,21 @@
 # Gaussian-weighted conspecific and heterospecific neighbor density at several
 # scales, using the same kernel as the model's kernel-sum.
 #
+# By default, densities are edge-corrected: each is divided by the share of its
+# Gaussian kernel that falls inside the core where resources are placed (+/-50.5),
+# so resources near the edges are not undercounted at large scales (see
+# edge_effects.R). Pass --uncorrected to use the model's uncorrected kernel.
+#
 # For each scale, it fits eaten ~ conspecific + heterospecific density within each
 # run (logistic, coefficients expressed per pooled SD of density for that type and
 # scale) and summarizes the per-run coefficients across runs. A positive
 # heterospecific coefficient means neighbors of the other type raise risk (shared
 # doom); a negative one means they lower it (associational refuge).
 #
-# As a check, densities at sigma = 1 are compared with the model's own values for
-# eaten resources (R1-neighbor-list, R2-neighbor-list).
+# As a check, uncorrected densities at sigma = 1 are compared with the model's own
+# values for eaten resources (R1-neighbor-list, R2-neighbor-list).
 #
-# Usage: Rscript analysis/neighbor_scales.R [results/replacement-handle100-scales.csv ...]
+# Usage: Rscript analysis/neighbor_scales.R [--uncorrected] [results/replacement-handle100-scales.csv ...]
 
 suppressPackageStartupMessages({
   library(data.table)
@@ -26,9 +31,13 @@ suppressPackageStartupMessages({
 })
 
 args <- commandArgs(trailingOnly = TRUE)
-inputs <- if (length(args) > 0) args else
-  c("results/replacement-handle100-scales.csv", "results/additive-handle100-scales.csv")
+edge_correct <- !("--uncorrected" %in% args)
+inputs <- setdiff(args, "--uncorrected")
+if (length(inputs) == 0)
+  inputs <- c("results/replacement-handle100-scales.csv", "results/additive-handle100-scales.csv")
 out_dir <- dirname(inputs[1])
+out_stem <- if (edge_correct) "neighbor_scales" else "neighbor_scales_uncorrected"
+core <- 50.5                      # resources are placed on patches -50 to 50
 
 sigmas <- c(0.5, 1, 2, 4, 8, 16, 32)
 cores <- max(1, detectCores() - 1)
@@ -60,7 +69,8 @@ read_runs <- function(path) {
 runs <- rbindlist(lapply(inputs, read_runs))
 runs <- runs[R1_num > 0 & R2_num > 0]   # heterospecific neighbors only exist in mixed runs
 runs[, run_id := .I]
-cat(sprintf("Read %d mixed runs from %s\n", nrow(runs), paste(inputs, collapse = ", ")))
+cat(sprintf("Read %d mixed runs from %s (%s densities)\n", nrow(runs), paste(inputs, collapse = ", "),
+            if (edge_correct) "edge-corrected" else "uncorrected"))
 
 fit_raw <- function(eaten, con, het) {
   if (sum(eaten) < 5 || sum(1 - eaten) < 5) return(c(NA_real_, NA_real_))
@@ -93,6 +103,13 @@ process_run <- function(i) {
     nR2 <- drop(K %*% !is_R1)
     if (s == 1 && n_eaten > 0) {
       check <- max(abs(c(nR1[1:n_eaten] - r$R1n_eaten[[1]], nR2[1:n_eaten] - r$R2n_eaten[[1]])))
+    }
+    if (edge_correct) {
+      # Share of a 2D Gaussian kernel centered on each resource that falls inside the core
+      inside <- (pnorm((core - xy[, 1]) / s) - pnorm((-core - xy[, 1]) / s)) *
+                (pnorm((core - xy[, 2]) / s) - pnorm((-core - xy[, 2]) / s))
+      nR1 <- nR1 / inside
+      nR2 <- nR2 / inside
     }
     con <- ifelse(is_R1, nR1, nR2)
     het <- ifelse(is_R1, nR2, nR1)
@@ -134,7 +151,7 @@ coef_summary[, `:=`(term = fifelse(term == "b_con", "conspecific", "heterospecif
 coef_summary[, direction := fcase(lower > 0, "raises risk", upper < 0, "lowers risk", default = "none")]
 setorderv(coef_summary, c("term", "type", "R1_radius", "R2_radius", "both_gud", "sigma"))
 
-fwrite(coef_summary, file.path(out_dir, "neighbor_scales_coefficients.csv"))
+fwrite(coef_summary, file.path(out_dir, paste0(out_stem, "_coefficients.csv")))
 print(coef_summary[term == "heterospecific",
                    .(type, R1_radius, R2_radius, both_gud, sigma, runs_fit,
                      mean = round(mean, 3), lower = round(lower, 3), upper = round(upper, 3), direction)],
@@ -153,5 +170,5 @@ p <- ggplot(coef_summary, aes(sigma, mean, color = interaction(R1_radius, R2_rad
        color = "R1 radius / R2 radius") +
   theme_bw()
 
-ggsave(file.path(out_dir, "neighbor_scales.png"), p, width = 9, height = 9, dpi = 150)
+ggsave(file.path(out_dir, paste0(out_stem, ".png")), p, width = 9, height = 9, dpi = 150)
 cat(sprintf("Wrote coefficients and figure to %s\n", out_dir))
