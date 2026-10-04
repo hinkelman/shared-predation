@@ -28,7 +28,56 @@ The model tracks total distance moved, handling time, energy gained, the number 
 
 ## Usage
 
-Requires [NetLogo 7.0.4](https://ccl.northwestern.edu/netlogo/) or later. Open `SharedPredation.nlogox`, click **setup**, then click **go**. The model includes BehaviorSpace experiments for parameter sweeps.
+Requires [NetLogo 7.0.4](https://ccl.northwestern.edu/netlogo/) or later. Open `SharedPredation.nlogox`, click **setup**, then click **go**. The model includes BehaviorSpace experiments, described below.
+
+## Experiments
+
+Every experiment runs for 20,000 ticks with one forager, 15 clusters of each resource type, and R1 as the high-quality resource (energy 100, handling time 10).
+
+### Naming
+
+Most experiment names combine three parts:
+
+- **`Opp` / `Sel`**: `Selective?` off (opportunistic) or on (selective).
+- **`Both` / `R1`**: `Both-GUD?` on or off, so the giving-up decision uses R1 + R2 density or R1 density alone.
+- **`FocalXAltY`**: `R1-num` = X and `R2-num` = Y. The three levels (125/375, 250/250, 375/125) keep the total at 500.
+
+### Threshold sweeps
+
+These 12 experiments have no suffix (for example `OppBothFocal125Alt375`). They cross `R1-radius` and `R2-radius` {8, 64} with `R2-energy` {10, 100} and `R2-handle` {10, 1000}:
+
+- **`Opp*`**: sweep `giving-up-density` from 1e-7 to 10 (9 levels). 100 repetitions, 14,400 runs each.
+- **`Sel*`**: also sweep `rejection-density` over the same 9 levels. 20 repetitions, 25,920 runs each.
+
+These runs record totals only, not neighbor lists.
+
+### Neighborhood runs
+
+These experiments run one giving-up density per condition, chosen from the sweeps, with 500 repetitions and `calculate-neighbors?` on. They record the type, time of death and neighborhood density of every resource eaten, so you can test whether a resource's neighbors changed its risk of being eaten.
+
+- **`Opp*_1-16`**: all 16 radius × energy × handling time conditions, as subexperiments. 8,000 runs each.
+- **`Sel*_Subset`**: only the conditions where the forager actually rejects R2 (8 to 11 per experiment). Two cases remain:
+  - `R2-handle` = 1000 with `rejection-density` = 0. The forager rejects nearly every R2, so these runs only tell you about R1.
+  - `R2-handle` = 10, where selectivity is a real trade-off.
+
+### Associational-effect designs
+
+These experiments compare the two standard designs from [Hambäck et al. 2014](https://doi.org/10.1890/13-0793.1). Both include monoculture controls (other type = 0), so an associational effect is the fraction of a type eaten in the mix minus the fraction eaten alone.
+
+- **`Replacement`**: total resources fixed at 500, with R1:R2 at 0:500, 125:375, 250:250, 375:125 and 500:0. 4,000 runs.
+- **`Additive`**: one type fixed at 250, with 0 to 500 of the other added. Each type takes a turn as the focal type. 7,200 runs.
+
+Both use R2 energy 10 and handling time 1000, and cross `R1-radius` and `R2-radius` {8, 64} with `Both-GUD?` on and off. They use 100 repetitions, a giving-up density of 0.01, and record neighbor lists.
+
+### Running headless
+
+To run an experiment from the command line:
+
+```bash
+/path/to/NetLogo-7.0.4/netlogo-headless.sh --model SharedPredation.nlogox --experiment Replacement --table replacement.csv
+```
+
+Experiments with subexperiments write all their runs to one file. Use the parameter columns to tell the conditions apart.
 
 ## Status
 
