@@ -70,6 +70,9 @@ resources <- runs[, {
 counts <- resources[, .(n_R1 = sum(type == "R1"), n_R2 = sum(type == "R2")), by = run_id][runs, on = "run_id"]
 stopifnot(all(counts$n_R1 == counts$R1_num), all(counts$n_R2 == counts$R2_num))
 
+# Survivor densities are recorded to 5 decimal places; round eaten ones to match so that,
+# for example, a tiny density is 0 for eaten and surviving resources alike
+resources[, `:=`(R1n = round(R1n, 5), R2n = round(R2n, 5))]
 resources[, `:=`(con = fifelse(type == "R1", R1n, R2n),
                  het = fifelse(type == "R1", R2n, R1n))]
 resources[, `:=`(con_z = con / sd(con), het_z = het / sd(het)), by = type]
@@ -79,7 +82,7 @@ fit_run <- function(eaten, con_z, het_z) {
   if (sum(eaten) < 5 || sum(1 - eaten) < 5) return(list(b_con = NA_real_, b_het = NA_real_))
   f <- suppressWarnings(glm.fit(cbind(1, con_z, het_z), eaten, family = binomial()))
   b <- f$coefficients
-  if (!f$converged || any(abs(b[2:3]) > 10)) return(list(b_con = NA_real_, b_het = NA_real_))
+  if (!f$converged || anyNA(b) || any(abs(b[2:3]) > 10)) return(list(b_con = NA_real_, b_het = NA_real_))
   list(b_con = b[[2]], b_het = b[[3]])
 }
 coefs <- resources[, fit_run(eaten, con_z, het_z),
