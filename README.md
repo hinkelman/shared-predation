@@ -249,7 +249,38 @@ The jump between thresholds 0 and 1e-4 happens because many R2 lie far enough fr
 
 This changes how to read the selective results above. In these experiments, the R2 "behavioral refuge" is R2 being dropped from the diet altogether. At the best threshold, R2 avoids shared doom only because it isn't eaten at all.
 
-A density-dependent rejection rule matters only when R2 is profitable enough to be eaten some of the time: profitability near the specialist intake rate (about 0.2–0.9 per tick here). Getting there needs a shorter R2 handling time (about 10–40 with energy 10) or more R2 energy, with rejection density 0 in the grid. The other open question is whether R2 next to dense R1 is protected individually, which needs neighbor data.
+A density-dependent rejection rule could only matter when R2 is profitable enough to be eaten some of the time, with profitability near the specialist intake rate (about 0.2–0.9 per tick here). The profitability sweep below tests that.
+
+#### Profitability sweep
+
+**`Selective-Profitability`** fixes `R2-handle` at 50 and varies `R2-energy` {5, 10, 20, 40, 80}, giving R2 profitabilities of 0.1, 0.2, 0.4, 0.8 and 1.6 per tick. That brackets the specialist rates. Varying energy instead of handling time keeps the time cost of each R2 meal fixed.
+
+- `rejection-density` {0, 1e-4, 1e-3, 0.01, 0.1, 1, 10} plus 1000 (never reject).
+- The same giving-up densities, both radii and three mixes as before.
+- `Both-GUD?` fixed on, since it made no difference in the Handle200 runs.
+- 40 repetitions: 96,000 runs, about 2 hours headless.
+
+`analysis/selective.R` labels the best rule in each condition as "drop R2" (rejection density 0), "density-dependent" or "no clear gain". It also compares the outcome with the prey model, using the specialist rate measured in the rejection-density-0 runs.
+
+```bash
+Rscript analysis/selective.R results/selective-profitability.csv
+```
+
+Gain from dropping R2 (rejection density 0) over never rejecting, median across conditions:
+
+| R2 profitability (per tick) | 0.1 | 0.2 | 0.4 | 0.8 | 1.6 |
+|---|---|---|---|---|---|
+| Gain from dropping R2 | +4.8% | +3.0% | −7.8% | −17% | −32% |
+| Conditions where selectivity clearly pays | 2 of 12 | 2 of 12 | 0 of 12 | 0 of 12 | 0 of 12 |
+
+- **The prey model gets the direction right.** When R2 is profitable (0.8 and 1.6 per tick), the forager should eat it: rejecting R2 loses energy, and the more R2 it rejects, the more it loses.
+- **The forager should switch to dropping R2 at lower profitability than the prey model predicts.** The model says to drop R2 at 0.4 per tick when R1 is common (specialist rates 0.49–0.75), but there, dropping R2 loses 8%. In this model rejecting isn't free: each rejection costs a tick and resets the forager's step. So dropping R2 pays only when R2 is well below the specialist rate.
+- **Where dropping R2 pays, the gain is small at this handling time.** It's 3–5%, about the size of the standard error with 20 repetitions per half. At handling time 200 the gain was 51%, because each R2 meal wasted more time.
+- **Rejecting R2 only where R1 is dense never wins.** Intermediate thresholds land between always and never rejecting, and none is clearly best in any condition. In this model, what matters is whether to eat R2 at all, as in the prey model, not where to eat it.
+
+Run 23245 hung during setup because of a bug in `add-offspring`, since fixed. It was stopped, so one cell has 39 of its 40 repetitions: R2 radius 8, energy 80, rejection density 0.1, giving-up density 0.001, R1:R2 125:375.
+
+The open question is whether R2 next to dense R1 is protected individually, which needs neighbor data from selective runs.
 
 ### Running headless
 
