@@ -96,7 +96,7 @@ end
 
 to add-parents
   set-default-shape resources "dot"                                     ; Set shape of resources to dot - foragers and resources are actually points, but can be given arbitrary dimensions for visualization
-  while [count resources with [resource-type = "R1"] = 0][
+  while [not any? resources with [resource-type = "R1" and reaches-core? R1-radius]][          ; Parents can sit up to one radius outside the core; redraw until at least one can place offspring in it, or add-offspring never finishes
     create-resources random-poisson R1-clusters [
       setxy ((random-float (101 + 2 * R1-radius)) - (50.5 + R1-radius)) ((random-float (101 + 2 * R1-radius)) - (50.5 + R1-radius))
       set color orange
@@ -108,7 +108,7 @@ to add-parents
       set rejected? false
       ]
     ]
-  while [count resources with [resource-type = "R2"] = 0][
+  while [not any? resources with [resource-type = "R2" and reaches-core? R2-radius]][
     create-resources random-poisson R2-clusters [
       setxy ((random-float (101 + 2 * R2-radius)) - (50.5 + R2-radius)) ((random-float (101 + 2 * R2-radius)) - (50.5 + R2-radius))
       set color white
@@ -120,6 +120,12 @@ to add-parents
       set rejected? false
       ]
     ]
+end
+
+to-report reaches-core? [radius]                                     ; Turtle reporter: true if an offspring placed within radius of this parent can land in the core (patches -50 to 50)
+  let x-out max list 0 ((abs xcor) - 50.5)                           ; Distance outside the core along each axis
+  let y-out max list 0 ((abs ycor) - 50.5)
+  report (x-out ^ 2 + y-out ^ 2) < radius ^ 2
 end
 
 to add-offspring
