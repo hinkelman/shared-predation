@@ -33,10 +33,13 @@ suppressPackageStartupMessages({
 args <- commandArgs(trailingOnly = TRUE)
 edge_correct <- !("--uncorrected" %in% args)
 inputs <- setdiff(args, "--uncorrected")
-if (length(inputs) == 0)
-  inputs <- c("results/replacement-handle100-scales.csv", "results/additive-handle100-scales.csv")
+default_inputs <- c("results/replacement-handle100-scales.csv", "results/additive-handle100-scales.csv")
+if (length(inputs) == 0) inputs <- default_inputs
 out_dir <- dirname(inputs[1])
 out_stem <- if (edge_correct) "neighbor_scales" else "neighbor_scales_uncorrected"
+# Outputs from other inputs are prefixed with the first input's name so they don't overwrite these
+if (!setequal(inputs, default_inputs))
+  out_stem <- paste0(tools::file_path_sans_ext(basename(inputs[1])), "_", out_stem)
 core <- 50.5                      # resources are placed on patches -50 to 50
 
 sigmas <- c(0.5, 1, 2, 4, 8, 16, 32)
@@ -55,6 +58,9 @@ read_runs <- function(path) {
     R1_radius = as.numeric(dt[["R1-radius"]]),
     R2_radius = as.numeric(dt[["R2-radius"]]),
     both_gud = as.logical(toupper(dt[["Both-GUD?"]])),
+    # Rejection rule: "never" for opportunistic foragers or a threshold too high to reach
+    rejection = fifelse(toupper(dt[["Selective?"]]) == "TRUE" & as.numeric(dt[["rejection-density"]]) < 1000,
+                        dt[["rejection-density"]], "never"),
     R1_num = as.numeric(dt[["R1-num"]]),
     R2_num = as.numeric(dt[["R2-num"]]),
     type_eaten = parse_types(dt[["type-eaten"]]),
@@ -127,7 +133,7 @@ process_run <- function(i) {
 }
 
 fits <- rbindlist(mclapply(seq_len(nrow(runs)), process_run, mc.cores = cores))
-fits <- runs[, .(run_id, R1_radius, R2_radius, both_gud, R1_num, R2_num)][fits, on = "run_id"]
+fits <- runs[, .(run_id, R1_radius, R2_radius, both_gud, rejection, R1_num, R2_num)][fits, on = "run_id"]
 
 check <- fits[, .(max_diff = max(max_diff_sigma1, na.rm = TRUE))]
 cat(sprintf("Largest difference from the model's sigma = 1 densities: %.2e\n", check$max_diff))
@@ -140,7 +146,7 @@ fits <- pooled[fits, on = .(type, sigma)]
 fits[, `:=`(b_con = b_con_raw * sd_con, b_het = b_het_raw * sd_het)]
 fits[abs(b_con) > 10 | abs(b_het) > 10, `:=`(b_con = NA_real_, b_het = NA_real_)]
 
-conditions <- c("type", "R1_radius", "R2_radius", "both_gud", "sigma")
+conditions <- c("type", "R1_radius", "R2_radius", "both_gud", "rejection", "sigma")
 coef_summary <- melt(fits, id.vars = conditions, measure.vars = c("b_con", "b_het"),
                      variable.name = "term", value.name = "b")[
   , .(runs_fit = sum(!is.na(b)), runs_total = .N,
@@ -149,26 +155,43 @@ coef_summary <- melt(fits, id.vars = conditions, measure.vars = c("b_con", "b_he
 coef_summary[, `:=`(term = fifelse(term == "b_con", "conspecific", "heterospecific"),
                     lower = mean - 1.96 * se, upper = mean + 1.96 * se)]
 coef_summary[, direction := fcase(lower > 0, "raises risk", upper < 0, "lowers risk", default = "none")]
-setorderv(coef_summary, c("term", "type", "R1_radius", "R2_radius", "both_gud", "sigma"))
+setorderv(coef_summary, c("term", "type", "R1_radius", "R2_radius", "both_gud", "rejection", "sigma"))
 
 fwrite(coef_summary, file.path(out_dir, paste0(out_stem, "_coefficients.csv")))
 print(coef_summary[term == "heterospecific",
-                   .(type, R1_radius, R2_radius, both_gud, sigma, runs_fit,
+                   .(type, R1_radius, R2_radius, both_gud, rejection, sigma, runs_fit,
                      mean = round(mean, 3), lower = round(lower, 3), upper = round(upper, 3), direction)],
       nrows = Inf)
 
 gud_labels <- c(`TRUE` = "Both-GUD on", `FALSE` = "Both-GUD off")
-p <- ggplot(coef_summary, aes(sigma, mean, color = interaction(R1_radius, R2_radius, sep = " / "))) +
-  geom_hline(yintercept = 0, color = "grey50") +
-  geom_line() +
-  geom_pointrange(aes(ymin = lower, ymax = upper), size = 0.2) +
-  scale_x_log10(breaks = sigmas) +
-  facet_grid(paste(type, term) ~ both_gud, labeller = labeller(both_gud = gud_labels),
-             scales = "free_y") +
-  labs(x = "Neighborhood scale (sigma)",
-       y = "Log-odds of being eaten per SD of neighbor density\n(mean of per-run fits, 95% CI)",
-       color = "R1 radius / R2 radius") +
-  theme_bw()
+y_label <- "Log-odds of being eaten per SD of neighbor density\n(mean of per-run fits, 95% CI)"
+if (uniqueN(coef_summary$rejection) == 1) {
+  p <- ggplot(coef_summary, aes(sigma, mean, color = interaction(R1_radius, R2_radius, sep = " / "))) +
+    geom_hline(yintercept = 0, color = "grey50") +
+    geom_line() +
+    geom_pointrange(aes(ymin = lower, ymax = upper), size = 0.2) +
+    scale_x_log10(breaks = sigmas) +
+    facet_grid(paste(type, term) ~ both_gud, labeller = labeller(both_gud = gud_labels),
+               scales = "free_y") +
+    labs(x = "Neighborhood scale (sigma)", y = y_label, color = "R1 radius / R2 radius") +
+    theme_bw()
+} else {
+  # Selective runs: one column per rejection threshold, ordered from most to least selective
+  thresholds <- sort(unique(as.numeric(setdiff(coef_summary$rejection, "never"))))
+  coef_summary[, rejection_label := factor(fifelse(rejection == "never", "never reject", paste("reject above", rejection)),
+                                           levels = c(paste("reject above", thresholds), "never reject"))]
+  p <- ggplot(coef_summary, aes(sigma, mean, color = interaction(R1_radius, R2_radius, sep = " / "),
+                                linetype = factor(both_gud))) +
+    geom_hline(yintercept = 0, color = "grey50") +
+    geom_line() +
+    geom_point(size = 0.8) +
+    scale_x_log10(breaks = sigmas) +
+    facet_grid(paste(type, term) ~ rejection_label, scales = "free_y") +
+    scale_linetype_discrete(name = NULL, labels = gud_labels) +
+    labs(x = "Neighborhood scale (sigma)", y = y_label, color = "R1 radius / R2 radius") +
+    theme_bw()
+}
 
-ggsave(file.path(out_dir, paste0(out_stem, ".png")), p, width = 9, height = 9, dpi = 150)
+ggsave(file.path(out_dir, paste0(out_stem, ".png")), p,
+       width = if (uniqueN(coef_summary$rejection) == 1) 9 else 14, height = 9, dpi = 150)
 cat(sprintf("Wrote coefficients and figure to %s\n", out_dir))
