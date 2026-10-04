@@ -53,7 +53,7 @@ These runs record totals only, not neighbor lists.
 
 ### Neighborhood runs
 
-These experiments run one giving-up density per condition, chosen from the sweeps, with 500 repetitions and `calculate-neighbors?` on. They record the type, time of death and neighborhood density of every resource eaten, so you can test whether a resource's neighbors changed its risk of being eaten.
+These experiments run one giving-up density per condition, chosen from the sweeps, with 500 repetitions and `calculate-neighbors?` on. They record the type, time of death and neighborhood density of every resource eaten. They don't record survivors' neighborhoods, so on their own they can't show whether neighbors changed a resource's risk (see [Neighbor analysis](#neighbor-analysis)).
 
 - **`Opp*_1-16`**: all 16 radius × energy × handling time conditions, as subexperiments. 8,000 runs each.
 - **`Sel*_Subset`**: only the conditions where the forager actually rejects R2 (8 to 11 per experiment). Two cases remain:
@@ -76,6 +76,30 @@ To analyze an experiment, pass its output to the matching script in `analysis/`.
 ```bash
 Rscript analysis/replacement.R results/replacement-handle100.csv
 ```
+
+`analysis/compare_handling.R` compares the outputs of both designs at handling times of 1000 and 100.
+
+### Neighbor analysis
+
+The designs above measure associational effects for the whole landscape. The neighbor analysis asks the individual-level question: does a resource's own neighborhood change its chance of being eaten?
+
+Each resource's neighborhood density is calculated once at setup: a Gaussian-weighted count of nearby R1 and R2, using `sigma`. The Handle100 experiments record this density for every eaten resource and, through two extra metrics, for every survivor. Together, the eaten and surviving resources cover the whole population.
+
+`analysis/neighbors.R` uses only mixed runs (both types present):
+
+1. Builds one row per resource with its conspecific density, heterospecific density, and whether it was eaten.
+2. Within each run, fits a logistic regression of being eaten on both densities. Each density is scaled by its standard deviation, pooled across runs for that resource type.
+3. Averages the per-run coefficients within each combination of focal type, `R1-radius`, `R2-radius` and `Both-GUD?`, with 95% intervals based on run-to-run variation. Runs where too few resources of a type were eaten, or survived, to fit are skipped.
+
+A positive heterospecific coefficient means neighbors of the other type raise risk (shared doom). A negative one means they lower it (associational refuge).
+
+The script also writes the fraction eaten in bins of heterospecific density, as a model-free check:
+
+```bash
+Rscript analysis/neighbors.R results/replacement-handle100-neighbors.csv results/additive-handle100-neighbors.csv
+```
+
+Neighborhoods are measured at setup and not updated as resources are eaten, and only at the scale set by `sigma`.
 
 ### Running headless
 
