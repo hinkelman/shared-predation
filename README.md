@@ -346,4 +346,23 @@ Experiments with subexperiments write all their runs to one file. Use the parame
 
 ## Status
 
-This is an unfinished exploratory model. See the Info tab in the model for full documentation.
+This is an exploratory model, still in progress. See the Info tab in the model for full documentation.
+
+**Done so far:**
+
+- Landscape-level replacement and additive designs at R2 handling times of 1000 and 100.
+- Individual-level neighbor analysis at multiple scales, with edge correction.
+- Selective foraging across R2 handling times and profitabilities.
+- A neighbor analysis of selective foragers.
+
+The [Findings](#findings) section summarizes the results. The R scripts in `analysis/` reproduce every summary and figure from the BehaviorSpace output. Model output in `results/` is not committed; rerun the experiments headless to regenerate it.
+
+**Older experiments.** The threshold sweeps (`Opp*`, `Sel*`) and neighborhood runs (`Opp*_1-16`, `Sel*_Subset`) come from the original design and are kept for reference. Their R2 handling times (10 and 1000) leave little room for real trade-offs, the `Sel*` grids miss the rejection thresholds that matter, and the neighborhood runs don't record survivors. The `Selective-*` and Handle100 experiments supersede them.
+
+**Open questions and limitations:**
+
+- **Spatial association between types.** R1 and R2 cluster centers are placed independently, so how much the types overlap varies by chance between runs. A setting that controls overlap would let the designs test mixing directly.
+- **Consumer density.** All experiments use one forager. [Merwin et al. (2017)](https://doi.org/10.1002/ecy.2004) found that neighborhood effects weaken as consumer density rises, which multiple foragers could test.
+- **Population consequences.** Resources don't regrow and there are no population dynamics, so the results describe foraging outcomes over 20,000 ticks, not long-term effects on R1 and R2.
+- **Giving-up density.** The associational-effect and neighbor experiments use a fixed giving-up density of 0.01, not the forager's best response in each condition.
+- **Rejection rule.** Foragers judge R1 density at their own `sigma` of 1. Other scales, or a rule based on recent intake rate instead of local R1 density, might make density-dependent selectivity worthwhile.
