@@ -4461,26 +4461,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
             <value value="8"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.01"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-energy">
@@ -4511,46 +4491,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </enumeratedValueSet>
             <enumeratedValueSet variable="rejection-density">
             <value value="0"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.01"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="giving-up-density">
             <value value="0.1"></value>
@@ -4601,46 +4541,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-energy">
@@ -4671,46 +4571,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </enumeratedValueSet>
             <enumeratedValueSet variable="rejection-density">
             <value value="0"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="giving-up-density">
             <value value="0.1"></value>
@@ -4822,46 +4682,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
             <value value="8"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-energy">
@@ -4899,46 +4719,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </subExperiment>
         <subExperiment>
           <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.01"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-radius">
@@ -4972,46 +4752,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </enumeratedValueSet>
             <enumeratedValueSet variable="rejection-density">
             <value value="0"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="giving-up-density">
             <value value="0.1"></value>
@@ -5052,46 +4792,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </enumeratedValueSet>
             <enumeratedValueSet variable="rejection-density">
             <value value="0"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="giving-up-density">
             <value value="0.1"></value>
@@ -5223,26 +4923,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
             <value value="8"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-energy">
@@ -5296,26 +4976,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </enumeratedValueSet>
             <enumeratedValueSet variable="giving-up-density">
             <value value="0.01"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
           </enumeratedValueSet>
           </subExperiment>
         <subExperiment>
@@ -5383,26 +5043,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-energy">
@@ -5433,46 +5073,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </enumeratedValueSet>
             <enumeratedValueSet variable="rejection-density">
             <value value="0"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="giving-up-density">
             <value value="0.1"></value>
@@ -5584,46 +5184,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
             <value value="8"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="1.0E-5"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.01"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-energy">
@@ -5661,46 +5221,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </subExperiment>
         <subExperiment>
           <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="1.0E-4"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.01"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-radius">
@@ -5744,46 +5264,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.001"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.01"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-energy">
@@ -5817,46 +5297,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </enumeratedValueSet>
             <enumeratedValueSet variable="giving-up-density">
             <value value="1.0E-4"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="1.0E-4"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
           </enumeratedValueSet>
           </subExperiment>
       </subExperiments>
@@ -5985,26 +5425,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
             <value value="8"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.001"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-energy">
@@ -6042,46 +5462,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </subExperiment>
         <subExperiment>
           <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.001"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-radius">
@@ -6125,46 +5505,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.01"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-energy">
@@ -6198,46 +5538,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </enumeratedValueSet>
             <enumeratedValueSet variable="giving-up-density">
             <value value="0.01"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
           </enumeratedValueSet>
           </subExperiment>
       </subExperiments>
@@ -6366,26 +5666,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
             <value value="8"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.001"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-energy">
@@ -6443,26 +5723,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </subExperiment>
         <subExperiment>
           <enumeratedValueSet variable="R1-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.01"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
             <value value="64"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="R2-radius">
@@ -6496,46 +5756,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </enumeratedValueSet>
             <enumeratedValueSet variable="rejection-density">
             <value value="0"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="8"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="giving-up-density">
             <value value="0.1"></value>
@@ -6596,26 +5816,6 @@ Source: https://github.com/hinkelman/shared-predation</info>
           </enumeratedValueSet>
             <enumeratedValueSet variable="rejection-density">
             <value value="0.01"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="giving-up-density">
-            <value value="0.1"></value>
-          </enumeratedValueSet>
-          </subExperiment>
-        <subExperiment>
-          <enumeratedValueSet variable="R1-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-radius">
-            <value value="64"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-energy">
-            <value value="100"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="R2-handle">
-            <value value="10"></value>
-          </enumeratedValueSet>
-            <enumeratedValueSet variable="rejection-density">
-            <value value="10"></value>
           </enumeratedValueSet>
             <enumeratedValueSet variable="giving-up-density">
             <value value="0.1"></value>
