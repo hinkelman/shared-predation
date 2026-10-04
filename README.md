@@ -101,6 +101,22 @@ Rscript analysis/neighbors.R results/replacement-handle100-neighbors.csv results
 
 Neighborhoods are measured at setup and not updated as resources are eaten, and only at the scale set by `sigma`.
 
+#### Results
+
+These results come from the Handle100 experiments: 8,000 mixed runs with `sigma` = 1. Effects are per standard deviation of neighbor density.
+
+- **R2 near R1: shared doom in all 8 settings.** Each SD of nearby R1 raises an R2's odds of being eaten by about 11–25%. The binned fraction eaten rises from about 18–22% with no R1 nearby to 27–36% in the densest R1 neighborhoods. The effect is strongest when the giving-up decision uses R1 alone (`Both-GUD?` off). The forager stays in intensive search near R1, and nearby R2 get eaten along the way.
+- **R1 near R2: no associational refuge.** Nearby R2 has no effect in 3 settings (both with `R1-radius` = 8) and raises R1's risk slightly in the other 5 (about 4–9% per SD).
+- **R1 near R1: higher risk in all 8 settings.** Dense R1 triggers intensive search.
+- **R2 near R2: depends on the giving-up rule.** With `Both-GUD?` on, dense R2 also triggers intensive search, so R2 clumps are riskier (all 4 settings). With it off, R2 clumps don't hold the forager, and clumping lowers risk in 3 settings and has no effect in 1.
+
+Compared with the landscape-level designs:
+
+- R2 shared doom shows up at both scales.
+- The R1 refuge in both designs, and the R2 refuge in the additive design, appear only at the landscape level. They come from the time the forager spends handling the other type, not from a resource's own neighbors. An individual R2 near R1 is at higher risk, not lower.
+
+About 3% of runs in a few settings were skipped because too few resources were eaten, or survived, to fit.
+
 ### Running headless
 
 To run an experiment from the command line:
