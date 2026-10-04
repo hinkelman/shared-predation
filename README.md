@@ -189,11 +189,32 @@ Rscript analysis/selective.R results/selective-handlesweep.csv
 | 100 | 0 of 24 | +2.4% | 0.1 |
 | 200 | 8 of 24 | +9.4% | 0.03 |
 
-- **Selectivity pays mainly when R2 is slow to handle and R1 is common.** With handling time 200 and an R1:R2 mix of 375:125, the median gain is 16%, and 5 of 8 conditions clearly pay. As handling time rises, the best rule rejects R2 at lower R1 densities.
+- **Selectivity pays mainly when R2 is slow to handle.** As handling time rises, the best rule rejects R2 at lower R1 densities. At handling time 200, this sweep suggested selectivity paid most when R1 was common, but the Handle200 rerun below shows that R1 clustering matters more.
 - **Selectivity gives R2 a behavioral refuge.** At the best threshold, the fraction of R2 eaten falls by a median of about 3 percentage points, and by 7–8 points when R1 is common. This happens even where selectivity doesn't pay in energy. The fraction of R1 eaten rises by 1–5 points, because the forager spends the saved time finding R1. Unlike the handling-time refuges in the associational-effect designs, this one comes from the forager's choices.
 - **The comparisons are noisy.** With 10 repetitions per half, the standard error of the gain is often 200–1,500 energy units, about as large as the gains. The best thresholds are scattered across the grid, which suggests the energy surface is fairly flat near its peak.
 
-Next steps would be more repetitions where selectivity pays (handling time 200, R1 common), and neighbor data to test whether R2 next to dense R1 is protected individually.
+#### Handle200 rerun
+
+**`Selective-Handle200`** repeats the sweep with `R2-handle` fixed at 200 and 80 repetitions (40 per half): 76,800 runs, about an hour headless. The standard errors of the gains are roughly half those of the sweep.
+
+```bash
+Rscript analysis/selective.R results/selective-handle200.csv
+```
+
+With more repetitions, selectivity clearly pays in 16 of 24 conditions (8 of 24 in the sweep), with a median energy gain of 13%.
+
+| R1:R2 | Clearly pays | Median gain | Change in fraction of R2 eaten | Change in fraction of R1 eaten |
+|---|---|---|---|---|
+| 125:375 | 4 of 8 | +11% | −0.02 | +0.03 |
+| 250:250 | 8 of 8 | +15% | −0.05 | +0.05 |
+| 375:125 | 4 of 8 | +10% | −0.09 | +0.03 |
+
+- **R1 clustering decides whether selectivity pays.** With R1 spread out (radius 64), it pays in all 12 conditions, with median gains of 15–16%. With R1 tightly clustered (radius 8), it pays only at the 250:250 mix. With 125 R1 the gains are positive but uncertain, and with 375 R1 none are clear.
+- **`Both-GUD?` makes no difference.** Selectivity pays in 8 conditions with each setting, with median gains of 13–14%.
+- **The best threshold is the lowest one tried.** 15 of 24 conditions chose `rejection-density` 0.01, meaning the forager does best rejecting R2 even where R1 is sparse. The optimum may be lower still, so the grid should extend down to about 0.001.
+- **The R2 refuge is clear and grows with R1.** The fraction of R2 eaten falls by 1–13 percentage points. It is largest with common, spread-out R1: 10–13 points at 375:125 with R1 radius 64. The fraction of R1 eaten rises by up to 6 points.
+
+Next steps would be extending the rejection grid below 0.01, and collecting neighbor data to test whether R2 next to dense R1 is protected individually.
 
 ### Running headless
 
