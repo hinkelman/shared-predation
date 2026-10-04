@@ -6375,5 +6375,111 @@ Source: https://github.com/hinkelman/shared-predation</info>
         </subExperiment>
       </subExperiments>
     </experiment>
+    <experiment name="Selective-Handle200" repetitions="80" sequentialRunOrder="true" runMetricsEveryStep="false" timeLimit="20000">
+      <setup>setup</setup>
+      <go>go</go>
+      <metrics>
+        <metric>forager-count</metric>
+        <metric>total-dist</metric>
+        <metric>handling-time</metric>
+        <metric>resource-rejections</metric>
+        <metric>energy-gained</metric>
+        <metric>count resources with [resource-type = "R1"]</metric>
+        <metric>count resources with [resource-type = "R2"]</metric>
+      </metrics>
+      <constants>
+        <enumeratedValueSet variable="R1-clusters">
+          <value value="15"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R2-clusters">
+          <value value="15"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R1-radius">
+          <value value="8"></value>
+          <value value="64"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R2-radius">
+          <value value="8"></value>
+          <value value="64"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R1-energy">
+          <value value="100"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R2-energy">
+          <value value="10"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R1-handle">
+          <value value="10"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="R2-handle">
+          <value value="200"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="calculate-neighbors?">
+          <value value="false"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="forager-num">
+          <value value="1"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="PD?">
+          <value value="false"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="Selective?">
+          <value value="true"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="Both-GUD?">
+          <value value="true"></value>
+          <value value="false"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="extensive-mu">
+          <value value="1"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="intensive-mu">
+          <value value="3"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="rejection-density">
+          <value value="0.01"></value>
+          <value value="0.03"></value>
+          <value value="0.1"></value>
+          <value value="0.3"></value>
+          <value value="1"></value>
+          <value value="3"></value>
+          <value value="10"></value>
+          <value value="1000"></value>
+        </enumeratedValueSet>
+        <enumeratedValueSet variable="giving-up-density">
+          <value value="0.0001"></value>
+          <value value="0.001"></value>
+          <value value="0.01"></value>
+          <value value="0.1"></value>
+          <value value="1"></value>
+        </enumeratedValueSet>
+      </constants>
+      <subExperiments>
+        <subExperiment>
+          <enumeratedValueSet variable="R1-num">
+            <value value="125"></value>
+          </enumeratedValueSet>
+          <enumeratedValueSet variable="R2-num">
+            <value value="375"></value>
+          </enumeratedValueSet>
+        </subExperiment>
+        <subExperiment>
+          <enumeratedValueSet variable="R1-num">
+            <value value="250"></value>
+          </enumeratedValueSet>
+          <enumeratedValueSet variable="R2-num">
+            <value value="250"></value>
+          </enumeratedValueSet>
+        </subExperiment>
+        <subExperiment>
+          <enumeratedValueSet variable="R1-num">
+            <value value="375"></value>
+          </enumeratedValueSet>
+          <enumeratedValueSet variable="R2-num">
+            <value value="125"></value>
+          </enumeratedValueSet>
+        </subExperiment>
+      </subExperiments>
+    </experiment>
   </experiments>
 </model>
