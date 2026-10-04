@@ -6054,6 +6054,8 @@ Source: https://github.com/hinkelman/shared-predation</info>
         <metric>R1-neighbor-list</metric>
         <metric>R2-neighbor-list</metric>
         <metric>both-neighbor-list</metric>
+        <metric>[(list precision R1-neighbors 5 precision R2-neighbors 5)] of resources with [resource-type = "R1"]</metric>
+        <metric>[(list precision R1-neighbors 5 precision R2-neighbors 5)] of resources with [resource-type = "R2"]</metric>
       </metrics>
       <constants>
         <enumeratedValueSet variable="R1-clusters">
@@ -6170,6 +6172,8 @@ Source: https://github.com/hinkelman/shared-predation</info>
         <metric>R1-neighbor-list</metric>
         <metric>R2-neighbor-list</metric>
         <metric>both-neighbor-list</metric>
+        <metric>[(list precision R1-neighbors 5 precision R2-neighbors 5)] of resources with [resource-type = "R1"]</metric>
+        <metric>[(list precision R1-neighbors 5 precision R2-neighbors 5)] of resources with [resource-type = "R2"]</metric>
       </metrics>
       <constants>
         <enumeratedValueSet variable="R1-clusters">
