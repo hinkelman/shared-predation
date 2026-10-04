@@ -9,7 +9,7 @@ Because the resources are clustered in space, these interactions can show up as 
 
 ## Overview
 
-Foragers search a landscape that holds two resource types, R1 and R2. Each type is placed in clusters using a Neyman-Scott process, and each has its own number of clusters, cluster radius, energy value and handling time.
+Foragers search a landscape that holds two resource types, R1 and R2. Each type is placed in clusters using a Neyman-Scott process, and each has its own number of clusters, cluster radius, energy value and handling time. `cluster-overlap` (−1 to 1) sets how much R2 clusters overlap R1 clusters. At −1 the types are separated, at 0 they're placed independently (the default), and at 1 they share cluster centers.
 
 Foragers use composite random search. Each step length is drawn from a Lévy (Pareto) distribution. After each step, a forager compares the local resource density with a giving-up density:
 
@@ -361,7 +361,7 @@ The [Findings](#findings) section summarizes the results. The R scripts in `anal
 
 **Open questions and limitations:**
 
-- **Spatial association between types.** R1 and R2 cluster centers are placed independently, so how much the types overlap varies by chance between runs. A setting that controls overlap would let the designs test mixing directly.
+- **Spatial association between types.** By default, R1 and R2 cluster centers are placed independently, so how much the types overlap varies by chance between runs. The `cluster-overlap` setting now controls this, but no experiment uses it yet. It has the most effect when clusters are tight (radius 8).
 - **Consumer density.** All experiments use one forager. [Merwin et al. (2017)](https://doi.org/10.1002/ecy.2004) found that neighborhood effects weaken as consumer density rises, which multiple foragers could test.
 - **Population consequences.** Resources don't regrow and there are no population dynamics, so the results describe foraging outcomes over 20,000 ticks, not long-term effects on R1 and R2.
 - **Giving-up density.** The associational-effect and neighbor experiments use a fixed giving-up density of 0.01, not the forager's best response in each condition.
