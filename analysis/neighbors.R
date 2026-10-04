@@ -80,7 +80,9 @@ resources[, `:=`(con_z = con / sd(con), het_z = het / sd(het)), by = type]
 # Per-run logistic regressions; skip runs where too few or too many of a type were eaten to fit
 fit_run <- function(eaten, con_z, het_z) {
   if (sum(eaten) < 5 || sum(1 - eaten) < 5) return(list(b_con = NA_real_, b_het = NA_real_))
-  f <- suppressWarnings(glm.fit(cbind(1, con_z, het_z), eaten, family = binomial()))
+  # glm.fit can stop with an error on degenerate data (e.g., a density that is 0 for every resource)
+  f <- tryCatch(suppressWarnings(glm.fit(cbind(1, con_z, het_z), eaten, family = binomial())), error = \(e) NULL)
+  if (is.null(f)) return(list(b_con = NA_real_, b_het = NA_real_))
   b <- f$coefficients
   if (!f$converged || anyNA(b) || any(abs(b[2:3]) > 10)) return(list(b_con = NA_real_, b_het = NA_real_))
   list(b_con = b[[2]], b_het = b[[3]])

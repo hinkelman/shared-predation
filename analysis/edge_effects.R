@@ -60,8 +60,9 @@ cat(sprintf("Read %d mixed runs from %s\n", nrow(runs), paste(inputs, collapse =
 
 fit_raw <- function(eaten, X) {
   if (sum(eaten) < 5 || sum(1 - eaten) < 5) return(rep(NA_real_, ncol(X)))
-  f <- suppressWarnings(glm.fit(cbind(1, X), eaten, family = binomial()))
-  if (!f$converged || anyNA(f$coefficients)) return(rep(NA_real_, ncol(X)))
+  # glm.fit can stop with an error on degenerate data (e.g., a density that is 0 for every resource)
+  f <- tryCatch(suppressWarnings(glm.fit(cbind(1, X), eaten, family = binomial())), error = \(e) NULL)
+  if (is.null(f) || !f$converged || anyNA(f$coefficients)) return(rep(NA_real_, ncol(X)))
   unname(f$coefficients[-1])
 }
 

@@ -61,6 +61,7 @@ read_runs <- function(path) {
     # Rejection rule: "never" for opportunistic foragers or a threshold too high to reach
     rejection = fifelse(toupper(dt[["Selective?"]]) == "TRUE" & as.numeric(dt[["rejection-density"]]) < 1000,
                         dt[["rejection-density"]], "never"),
+    overlap = if ("cluster-overlap" %in% names(dt)) as.numeric(dt[["cluster-overlap"]]) else 0,
     R1_num = as.numeric(dt[["R1-num"]]),
     R2_num = as.numeric(dt[["R2-num"]]),
     type_eaten = parse_types(dt[["type-eaten"]]),
@@ -80,8 +81,9 @@ cat(sprintf("Read %d mixed runs from %s (%s densities)\n", nrow(runs), paste(inp
 
 fit_raw <- function(eaten, con, het) {
   if (sum(eaten) < 5 || sum(1 - eaten) < 5) return(c(NA_real_, NA_real_))
-  f <- suppressWarnings(glm.fit(cbind(1, con, het), eaten, family = binomial()))
-  if (!f$converged || anyNA(f$coefficients)) return(c(NA_real_, NA_real_))
+  # glm.fit can stop with an error on degenerate data (e.g., a density that is 0 for every resource)
+  f <- tryCatch(suppressWarnings(glm.fit(cbind(1, con, het), eaten, family = binomial())), error = \(e) NULL)
+  if (is.null(f) || !f$converged || anyNA(f$coefficients)) return(c(NA_real_, NA_real_))
   f$coefficients[2:3]
 }
 
@@ -133,7 +135,7 @@ process_run <- function(i) {
 }
 
 fits <- rbindlist(mclapply(seq_len(nrow(runs)), process_run, mc.cores = cores))
-fits <- runs[, .(run_id, R1_radius, R2_radius, both_gud, rejection, R1_num, R2_num)][fits, on = "run_id"]
+fits <- runs[, .(run_id, R1_radius, R2_radius, both_gud, rejection, overlap, R1_num, R2_num)][fits, on = "run_id"]
 
 check <- fits[, .(max_diff = max(max_diff_sigma1, na.rm = TRUE))]
 cat(sprintf("Largest difference from the model's sigma = 1 densities: %.2e\n", check$max_diff))
@@ -146,7 +148,7 @@ fits <- pooled[fits, on = .(type, sigma)]
 fits[, `:=`(b_con = b_con_raw * sd_con, b_het = b_het_raw * sd_het)]
 fits[abs(b_con) > 10 | abs(b_het) > 10, `:=`(b_con = NA_real_, b_het = NA_real_)]
 
-conditions <- c("type", "R1_radius", "R2_radius", "both_gud", "rejection", "sigma")
+conditions <- c("type", "R1_radius", "R2_radius", "both_gud", "rejection", "overlap", "sigma")
 coef_summary <- melt(fits, id.vars = conditions, measure.vars = c("b_con", "b_het"),
                      variable.name = "term", value.name = "b")[
   , .(runs_fit = sum(!is.na(b)), runs_total = .N,
@@ -155,17 +157,38 @@ coef_summary <- melt(fits, id.vars = conditions, measure.vars = c("b_con", "b_he
 coef_summary[, `:=`(term = fifelse(term == "b_con", "conspecific", "heterospecific"),
                     lower = mean - 1.96 * se, upper = mean + 1.96 * se)]
 coef_summary[, direction := fcase(lower > 0, "raises risk", upper < 0, "lowers risk", default = "none")]
-setorderv(coef_summary, c("term", "type", "R1_radius", "R2_radius", "both_gud", "rejection", "sigma"))
+setorderv(coef_summary, c("term", "type", "R1_radius", "R2_radius", "both_gud", "rejection", "overlap", "sigma"))
 
 fwrite(coef_summary, file.path(out_dir, paste0(out_stem, "_coefficients.csv")))
 print(coef_summary[term == "heterospecific",
-                   .(type, R1_radius, R2_radius, both_gud, rejection, sigma, runs_fit,
+                   .(type, R1_radius, R2_radius, both_gud, rejection, overlap, sigma, runs_fit,
                      mean = round(mean, 3), lower = round(lower, 3), upper = round(upper, 3), direction)],
       nrows = Inf)
 
 gud_labels <- c(`TRUE` = "Both-GUD on", `FALSE` = "Both-GUD off")
 y_label <- "Log-odds of being eaten per SD of neighbor density\n(mean of per-run fits, 95% CI)"
-if (uniqueN(coef_summary$rejection) == 1) {
+label_rejection <- function(r) {
+  thresholds <- sort(unique(as.numeric(setdiff(r, "never"))))
+  factor(fifelse(r == "never", "never reject", paste("reject above", r)),
+         levels = c(paste("reject above", thresholds), "never reject"))
+}
+if (uniqueN(coef_summary$overlap) > 1) {
+  # Overlap runs: color by cluster-overlap, one column per rejection rule (and radius combination, if they vary)
+  coef_summary[, panel := label_rejection(rejection)]
+  if (uniqueN(coef_summary[, .(R1_radius, R2_radius)]) > 1)
+    coef_summary[, panel := interaction(panel, paste("radii", R1_radius, "/", R2_radius), sep = ", ")]
+  p <- ggplot(coef_summary, aes(sigma, mean, color = factor(overlap), linetype = factor(both_gud),
+                                group = interaction(overlap, both_gud))) +
+    geom_hline(yintercept = 0, color = "grey50") +
+    geom_line() +
+    geom_point(size = 0.8) +
+    scale_x_log10(breaks = sigmas) +
+    scale_color_brewer(palette = "RdBu", direction = -1) +
+    facet_grid(paste(type, term) ~ panel, scales = "free_y") +
+    scale_linetype_discrete(name = NULL, labels = gud_labels) +
+    labs(x = "Neighborhood scale (sigma)", y = y_label, color = "cluster-overlap") +
+    theme_bw()
+} else if (uniqueN(coef_summary$rejection) == 1) {
   p <- ggplot(coef_summary, aes(sigma, mean, color = interaction(R1_radius, R2_radius, sep = " / "))) +
     geom_hline(yintercept = 0, color = "grey50") +
     geom_line() +
@@ -177,9 +200,7 @@ if (uniqueN(coef_summary$rejection) == 1) {
     theme_bw()
 } else {
   # Selective runs: one column per rejection threshold, ordered from most to least selective
-  thresholds <- sort(unique(as.numeric(setdiff(coef_summary$rejection, "never"))))
-  coef_summary[, rejection_label := factor(fifelse(rejection == "never", "never reject", paste("reject above", rejection)),
-                                           levels = c(paste("reject above", thresholds), "never reject"))]
+  coef_summary[, rejection_label := label_rejection(rejection)]
   p <- ggplot(coef_summary, aes(sigma, mean, color = interaction(R1_radius, R2_radius, sep = " / "),
                                 linetype = factor(both_gud))) +
     geom_hline(yintercept = 0, color = "grey50") +
@@ -193,5 +214,6 @@ if (uniqueN(coef_summary$rejection) == 1) {
 }
 
 ggsave(file.path(out_dir, paste0(out_stem, ".png")), p,
-       width = if (uniqueN(coef_summary$rejection) == 1) 9 else 14, height = 9, dpi = 150)
+       width = if (uniqueN(coef_summary$rejection) == 1 && uniqueN(coef_summary$overlap) == 1) 9 else 14,
+       height = 9, dpi = 150)
 cat(sprintf("Wrote coefficients and figure to %s\n", out_dir))
