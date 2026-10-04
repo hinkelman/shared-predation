@@ -280,7 +280,44 @@ Gain from dropping R2 (rejection density 0) over never rejecting, median across 
 
 Run 23245 hung during setup because of a bug in `add-offspring`, since fixed. It was stopped, so one cell has 39 of its 40 repetitions: R2 radius 8, energy 80, rejection density 0.1, giving-up density 0.001, R1:R2 125:375.
 
-The open question is whether R2 next to dense R1 is protected individually, which needs neighbor data from selective runs.
+That left one open question: is R2 next to dense R1 protected individually? The next subsection answers it with neighbor data from selective runs.
+
+#### Selective neighbor analysis
+
+**`Selective-Neighbors`** records the same neighbor and coordinate data as the Handle100 experiments, from selective foragers:
+
+- R2 energy 10 and handling time 100, the Handle100 setting where opportunistic foragers cause shared doom for R2.
+- `rejection-density` {0.001, 0.01, 0.1, 1} plus 1000 (never reject). The value 0 is left out because it drops nearly all R2, leaving nothing to fit.
+- Giving-up density 0.01, R1:R2 250:250, both radii {8, 64} and `Both-GUD?` on and off.
+- 100 repetitions: 4,000 runs, about 5 minutes headless.
+
+`analysis/neighbor_scales.R` splits results by rejection threshold when given selective runs. It names those outputs after the input file:
+
+```bash
+Rscript analysis/neighbor_scales.R results/selective-neighbors.csv
+```
+
+**Selectivity turns shared doom for R2 into a strong associational refuge.** The table gives R2's log-odds of being eaten per SD of nearby R1 (edge-corrected), as the median across the 8 settings. Negative values are a refuge.
+
+| Rejection density | sigma 0.5 | 1 | 2 | 4 | 8 | 16 | Settings showing a refuge |
+|---|---|---|---|---|---|---|---|
+| 0.001 | −0.84 | −1.65 | −2.39 | −1.29 | −0.66 | −0.40 | 8 of 8 at sigma ≤ 16 |
+| 0.01 | −0.80 | −1.15 | −1.41 | −0.86 | −0.47 | −0.25 | 8 of 8 at sigma ≤ 16 |
+| 0.1 | −0.57 | −0.94 | −0.91 | −0.52 | −0.29 | −0.15 | 8 of 8 at sigma ≤ 8 |
+| 1 | −0.33 | −0.39 | −0.20 | −0.04 | +0.03 | +0.04 | 8 of 8 at sigma ≤ 2 |
+| never | +0.07 | +0.18 | +0.24 | +0.27 | +0.25 | +0.20 | none (shared doom in 7–8 of 8) |
+
+- **The refuge strengthens as the threshold drops.** At 0.001, each SD of nearby R1 cuts an R2's odds of being eaten by about 90% at sigma = 2. Never rejecting reproduces the shared doom of the opportunistic Handle100 runs.
+- **The refuge is strongest at sigma 1–2 and fades at larger scales.** It reaches further with lower thresholds. This fits the rule, which rejects R2 based on R1 density near the forager, at the forager's own `sigma` of 1.
+- **R1 is unaffected.** Nearby R2 slightly raises R1's risk at every threshold (about 0.02–0.14), as it does without selectivity.
+- **Selective foragers still eat R2, just not near R1.** Mean R2 eaten per run falls from 61 (never reject) to 38 (threshold 0.001). R1 eaten rises from 79 to 88, and energy gained from 8,505 to 9,156.
+
+The refuge is partly built into the rule, since the forager rejects R2 exactly where R1 is dense. This experiment measures how strong the refuge is and how far it reaches. At threshold 0.001, some settings had as few as 31 of 100 runs with enough R2 eaten to fit, so those estimates are noisier.
+
+Together with the earlier results:
+
+- **An opportunistic forager** causes shared doom for R2 near R1, at the individual level and in replacement designs.
+- **A selective forager** gives R2 near R1 an associational refuge that comes from its choices. The R1 refuges seen elsewhere instead come from handling time.
 
 ### Running headless
 
