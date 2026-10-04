@@ -127,14 +127,18 @@ By default, the script edge-corrects densities: each is divided by the share of 
 Rscript analysis/neighbor_scales.R results/replacement-handle100-scales.csv results/additive-handle100-scales.csv
 ```
 
-Results from a separate set of 8,000 mixed Handle100 runs:
+Results from a separate set of 8,000 mixed Handle100 runs, with edge-corrected densities:
 
-- **R1 near R2: no associational refuge at any scale.** The only negative effect is at sigma = 0.5 in one setting (both radii 8, `Both-GUD?` off). Otherwise, nearby R2 has no effect at the finest scales and raises R1's risk from somewhere between sigma 1 and 8 upward, depending on the setting.
-- **R2 near R1: shared doom at every scale,** in all 8 settings except sigma = 0.5 with R1 radius 64, R2 radius 8 and `Both-GUD?` on. The effect grows with scale. When R1 is spread out (radius 64), it is weak at sigma = 0.5 and levels off from sigma = 4.
-- **R1 near R1: risk is highest at about the scale of an R1 cluster.** The effect peaks around sigma = 4 when R1 is spread out (radius 64). When R1 is tightly clustered (radius 8), it keeps rising to sigma 8 or beyond.
-- **R2 near R2 depends on scale and the giving-up rule.** With `Both-GUD?` off and R2 spread out (radius 64), close R2 neighbors (sigma ≤ 1) lower risk, but R2 density at sigma ≥ 4 raises it. With `Both-GUD?` on, R2 density raises risk from sigma 0.5–2 upward, depending on the setting.
+- **R2 near R1: shared doom at every scale.** It appears in all 8 settings at every scale, except sigma = 0.5 in the 2 settings with R1 radius 64 and R2 radius 8. When R1 is spread out (radius 64), it peaks around sigma = 4. When R1 is tightly clustered (radius 8), it keeps rising to sigma = 32, which may partly reflect position in the landscape (see [Edge effects](#edge-effects)).
+- **R1 near R2: no meaningful associational refuge.** The result depends on how R1 is clustered.
+  - With R1 radius 8, nearby R2 gives a small refuge only at sigma = 0.5 with `Both-GUD?` off (2 settings). At most other scales it has no effect, with a few small increases in risk.
+  - With R1 radius 64, nearby R2 raises R1's risk modestly from sigma = 1 upward.
+- **R1 near R1: risk peaks at the scale of an R1 cluster.** In all 8 settings the effect is largest at sigma = 4 and declines beyond it, with no effect at sigma = 32 in 3 settings.
+- **R2 near R2 depends on the giving-up rule.**
+  - With `Both-GUD?` on, R2 density triggers intensive search, so R2 clumps raise risk at sigma 0.5–8 (peaking around 2–4), with no effect at sigma ≥ 16.
+  - With `Both-GUD?` off, R2 clumps never raise risk. The forager doesn't stay in R2 patches, so clumping with other R2 lowers each one's risk or has no effect. This happens at fine scales when R2 is spread out (radius 64) and at middle-to-large scales when R2 is clustered (radius 8).
 
-Without correction, both densities raise risk for every type at sigma 16–32. The next section tests whether that is an edge effect.
+Without edge correction (`--uncorrected`), every density raised risk for every type at sigma 16–32. The next section shows that this was mostly an edge effect.
 
 #### Edge effects
 
