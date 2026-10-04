@@ -488,7 +488,7 @@ To color patches by the resource density field, run `visualize-R1-field` or `vis
 
 - Watch how foragers switch between long extensive steps and short intensive steps as they enter and leave clusters.
 - Compare the energy gained when the two resources are clustered differently, for example when R1 is tightly clustered and R2 is spread out.
-- Check whether R2 resources near R1 clusters are eaten more often than isolated R2 resources. Dense R1 triggers intensive search, so nearby R2 may suffer shared doom. With `Selective?` on, foragers reject R2 where R1 is dense, so R1 may instead give nearby R2 an associational refuge.
+- Check whether R2 resources near R1 clusters are eaten more often than isolated R2 resources. Dense R1 triggers intensive search, so nearby R2 may suffer shared doom. With `Selective?` on, foragers reject R2 where R1 is dense, so R1 may instead give nearby R2 an associational refuge. FINDINGS below summarizes what the experiments show.
 
 ## THINGS TO TRY
 
@@ -497,7 +497,23 @@ To color patches by the resource density field, run `visualize-R1-field` or `vis
 - Vary the number, clustering, energy or handling time of R2 and see how much R1 is eaten. This shows how one resource affects the other through the shared forager.
 - Vary `R1-radius` and `R2-radius` to change how closely the two resources overlap in space, and see whether shared doom or associational refuge changes with the scale of mixing.
 - Use the included BehaviorSpace experiments to sweep cluster radius, energy, handling time and selectivity.
-- Run the `Replacement` and `Additive` experiments to compare the two standard designs for associational effects ([Hambäck et al. 2014](https://doi.org/10.1890/13-0793.1)). `Replacement` holds total resources at 500 and varies the R1:R2 mix from 0:500 to 500:0. `Additive` holds one type at 250 and adds 0 to 500 of the other, with each type taking a turn as the focal type. Compare the fraction of each type eaten with its monoculture run (other type = 0). Hambäck et al. predict that replacement designs mostly show shared doom and additive designs mostly show associational refuge. `Replacement-Handle100` and `Additive-Handle100` repeat both designs with an R2 handling time of 100 instead of 1000.
+- Run the `Replacement` and `Additive` experiments to compare the two standard designs for associational effects ([Hambäck et al. 2014](https://doi.org/10.1890/13-0793.1)). `Replacement` holds total resources at 500 and varies the R1:R2 mix from 0:500 to 500:0. `Additive` holds one type at 250 and adds 0 to 500 of the other, with each type taking a turn as the focal type. Compare the fraction of each type eaten with its monoculture run (other type = 0). Hambäck et al. predict that replacement designs mostly show shared doom and additive designs mostly show associational refuge. `Replacement-Handle100` and `Additive-Handle100` repeat both designs with an R2 handling time of 100 instead of 1000, and record the coordinates and neighborhoods of every resource for individual-level analysis.
+- Run the `Selective-*` experiments to see when rejecting R2 pays. `Selective-Profitability` varies R2 energy so that R2 profitability brackets the intake rate of a forager that ignores R2, and `Selective-Neighbors` records neighborhoods from selective foragers.
+
+## FINDINGS
+
+These are the results so far from the BehaviorSpace experiments. The project README (https://github.com/hinkelman/shared-predation) has the details, analysis scripts and figures.
+
+1. **The landscape-level designs reproduce the patterns Hambäck et al. predicted.** In the replacement design, R1 gets an associational refuge and R2 suffers shared doom. In the additive design, both types get a refuge. With an R2 handling time of 1000, these effects come almost entirely from the time the forager spends handling R2. With a handling time of 100 they are weaker, and clustering and the giving-up rule start to matter.
+2. **Individually, R2 near R1 suffers shared doom, and R1 gets no refuge from R2.** For an opportunistic forager, nearby R1 raises an R2's risk at nearly every scale, and this survives edge correction. It's the clearest neighborhood effect in the model. Nearby R2 never meaningfully protects R1, so R1's landscape-level refuge is a time-budget effect, not a neighborhood effect.
+3. **Clumping with your own type depends on the scale and the giving-up rule.** R1 in dense R1 patches are at higher risk, peaking at about the scale of an R1 cluster. R2 clumps raise R2's risk only when `Both-GUD?` is on; otherwise, clumping lowers it or has no effect.
+4. **Position in the landscape matters.** Resources near the edge of the core are eaten about half as often as central ones, so neighborhood densities at large scales need edge correction.
+5. **Whether to eat R2 follows the logic of optimal diet theory.** When R2's profitability (energy / handling time) is far below what a forager earns by ignoring it, dropping R2 entirely pays: 51% more energy at an R2 handling time of 200. When R2 is profitable, eating it is best. The switch comes at lower profitability than the classic prey model predicts, because each rejection costs a tick and resets the forager's step. Rejecting R2 only where R1 is dense never beats the simpler choice of eating or skipping R2 everywhere.
+6. **A selective forager turns shared doom for R2 into an associational refuge.** When the forager rejects R2 where R1 is dense, R2 near R1 becomes safer. At the strictest threshold tested, each SD of nearby R1 cuts an R2's odds of being eaten by about 90%. R1 is unaffected.
+
+So whether a low-quality resource suffers shared doom or gains a refuge from a preferred neighbor depends on the forager's diet choice. Opportunistic foragers cause shared doom; selective foragers create a refuge through their choices. The preferred resource's refuge across whole landscapes comes from handling time, not from its neighbors.
+
+These results come from a single forager searching for 20,000 ticks, with fixed movement parameters and no resource regrowth or population dynamics. They describe foraging outcomes, not long-term consequences for the resource populations.
 
 ## EXTENDING THE MODEL
 
